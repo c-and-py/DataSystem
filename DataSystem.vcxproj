@@ -186,6 +186,7 @@
     <ClInclude Include="DataSystem.h" />
     <ClInclude Include="DataSystemDlg.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -194,6 +195,7 @@
   <ItemGroup>
     <ClCompile Include="DataSystem.cpp" />
     <ClCompile Include="DataSystemDlg.cpp" />
+    <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
