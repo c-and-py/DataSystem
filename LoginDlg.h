@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-
+#include "Tools.h"
 
 // LoginDlg 对话框
 

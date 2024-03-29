@@ -7,7 +7,8 @@
 #include "DataSystem.h"
 #include "DataSystemDlg.h"
 #include "afxdialogex.h"
-
+#include "LoginDlg.h"
+//#include "Tools.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -100,6 +101,9 @@ BOOL CDataSystemDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	LoginDlg* logindlg = new LoginDlg();
+	logindlg->Create(IDD_LOGIN);
+	logindlg->ShowWindow(SW_SHOW);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

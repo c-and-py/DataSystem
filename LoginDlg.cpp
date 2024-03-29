@@ -1,6 +1,6 @@
 ﻿// LoginDlg.cpp: 实现文件
 //
-
+#pragma once
 #include "pch.h"
 #include "DataSystem.h"
 #include "afxdialogex.h"
@@ -14,7 +14,6 @@ IMPLEMENT_DYNAMIC(LoginDlg, CDialogEx)
 LoginDlg::LoginDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_LOGIN, pParent)
 {
-
 }
 
 LoginDlg::~LoginDlg()
