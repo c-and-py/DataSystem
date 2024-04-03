@@ -8,7 +8,6 @@
 #include "DataSystemDlg.h"
 #include "afxdialogex.h"
 #include "LoginDlg.h"
-//#include "Tools.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif

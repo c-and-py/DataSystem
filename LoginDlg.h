@@ -1,9 +1,7 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-#include "Tools.h"
-
 // LoginDlg 对话框
-
+//登录界面
 class LoginDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(LoginDlg)

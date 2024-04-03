@@ -5,7 +5,7 @@
 #include "DataSystem.h"
 #include "afxdialogex.h"
 #include "LoginDlg.h"
-
+#include "Tools.h"
 
 // LoginDlg 对话框
 
@@ -14,6 +14,7 @@ IMPLEMENT_DYNAMIC(LoginDlg, CDialogEx)
 LoginDlg::LoginDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_LOGIN, pParent)
 {
+
 }
 
 LoginDlg::~LoginDlg()

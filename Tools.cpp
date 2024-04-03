@@ -1,41 +1,41 @@
-﻿#pragma once
+﻿//#pragma once
 #include"pch.h"
-#include <sql.h> 
-#include <sqlext.h> 
-#include <sqltypes.h>
 #include "Tools.h"
+
+SQLRETURN returnmsg = NULL;//返回信息
+SQLHENV handleenv = NULL;//环境句柄
+SQLHDBC handledbc = NULL;//连接句柄
+SQLHSTMT handlestmt = NULL;//语句句柄
+
 bool ConnectSQL(std::string datasource, std::string username, std::string password) {
-    SQLHENV henv; // 环境句柄
-    SQLHDBC hdbc; // 数据库连接句柄
-    SQLRETURN ret; // 返回值
 
     // 申请环境句柄
-    ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &henv);
-    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+    returnmsg = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &handleenv);
+    if (returnmsg != SQL_SUCCESS && returnmsg != SQL_SUCCESS_WITH_INFO) {
         std::cout << "无法申请环境句柄" << std::endl;
         return false;
     }
 
     // 设置环境属性
-    ret = SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, SQL_IS_INTEGER);
-    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+    returnmsg = SQLSetEnvAttr(handleenv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, SQL_IS_INTEGER);
+    if (returnmsg != SQL_SUCCESS && returnmsg != SQL_SUCCESS_WITH_INFO) {
         std::cout << "无法设置环境属性" << std::endl;
-        SQLFreeHandle(SQL_HANDLE_ENV, henv);
+        SQLFreeHandle(SQL_HANDLE_ENV, handleenv);
         return false;
     }
 
     // 申请数据库连接句柄
-    ret = SQLAllocHandle(SQL_HANDLE_DBC, henv, &hdbc);
-    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+    returnmsg = SQLAllocHandle(SQL_HANDLE_DBC, handleenv, &handledbc);
+    if (returnmsg != SQL_SUCCESS && returnmsg != SQL_SUCCESS_WITH_INFO) {
         std::cout << "无法申请数据库连接句柄" << std::endl;
-        SQLFreeHandle(SQL_HANDLE_ENV, henv);
+        SQLFreeHandle(SQL_HANDLE_ENV, handleenv);
         return false;
     }
 
     // 连接数据库,数据源名称，用户标识，密码，
     // 注意不要使用unicode字符集，否则连接不上，字符集改成未设置即可
-    ret = SQLConnect(hdbc, (SQLTCHAR*)(datasource.c_str()), SQL_NTS, (SQLTCHAR*)(username.c_str()), SQL_NTS, (SQLTCHAR*)(password.c_str()), SQL_NTS);
-    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+    returnmsg = SQLConnect(handledbc, (SQLTCHAR*)(datasource.c_str()), SQL_NTS, (SQLTCHAR*)(username.c_str()), SQL_NTS, (SQLTCHAR*)(password.c_str()), SQL_NTS);
+    if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
         std::cout << "数据库连接成功!" << std::endl;
     }
     else {
@@ -43,12 +43,157 @@ bool ConnectSQL(std::string datasource, std::string username, std::string passwo
     }
 
     // 释放句柄
-    SQLFreeHandle(SQL_HANDLE_DBC, hdbc);
-    SQLFreeHandle(SQL_HANDLE_ENV, henv);
-    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+    SQLFreeHandle(SQL_HANDLE_DBC, handledbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, handleenv);
+    if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
         return true;
     }
     else {
         return false;
     }
+}
+
+bool ExecuteSQL(std::string sql)
+{
+    //TODO
+    returnmsg = SQLExecDirect(handlestmt, (SQLCHAR*)sql.c_str(), SQL_NTS);
+    if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Insert()
+{
+	return false;
+}
+
+bool Delete()
+{
+	return false;
+}
+
+bool Update()
+{
+	return false;
+}
+
+void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y)
+{
+	// 加载位图资源  
+	HBITMAP hBitmap = (HBITMAP)::LoadImage(AfxGetInstanceHandle(),
+		MAKEINTRESOURCE(imageResourceId), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
+	if (hBitmap == NULL) {
+		AfxMessageBox(_T("Failed to load bitmap resource!"));
+		return;
+	}
+
+	// 创建CBitmap对象来管理位图资源  
+	CBitmap bitmap;
+	bitmap.Attach(hBitmap);
+
+	// 获取图像的大小  
+	BITMAP bm;
+	bitmap.GetBitmap(&bm);
+	int imageWidth = bm.bmWidth;
+	int imageHeight = bm.bmHeight;
+
+	// 确保图像在视图的边界内  
+	if (x + imageWidth > pDC->GetDeviceCaps(HORZRES)) {
+		x = pDC->GetDeviceCaps(HORZRES) - imageWidth;
+	}
+	if (y + imageHeight > pDC->GetDeviceCaps(VERTRES)) {
+		y = pDC->GetDeviceCaps(VERTRES) - imageHeight;
+	}
+
+	// 创建一个与位图兼容的内存DC  
+	CDC memDC;
+	memDC.CreateCompatibleDC(pDC);
+	CBitmap* pOldBitmap = memDC.SelectObject(&bitmap);
+
+	// 将位图绘制到设备上下文上  
+	//pDC->BitBlt(x, y, imageWidth, imageHeight, &memDC, 0, 0, SRCCOPY);
+	pDC->StretchBlt(x, y, x + imageWidth, y + imageHeight, &memDC, 0, 0, imageWidth, imageHeight, SRCCOPY);
+
+	// 恢复内存DC的原始位图  
+	memDC.SelectObject(pOldBitmap);
+}
+void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y, int width, int height)
+{
+	// 加载位图资源  
+	HBITMAP hBitmap = (HBITMAP)::LoadImage(AfxGetInstanceHandle(),
+		MAKEINTRESOURCE(imageResourceId), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
+	if (hBitmap == NULL) {
+		AfxMessageBox(_T("Failed to load bitmap resource!"));
+		return;
+	}
+
+	// 创建CBitmap对象来管理位图资源  
+	CBitmap bitmap;
+	bitmap.Attach(hBitmap);
+
+	// 获取图像的大小  
+	BITMAP bm;
+	bitmap.GetBitmap(&bm);
+	int imageWidth = bm.bmWidth;
+	int imageHeight = bm.bmHeight;
+
+	// 确保图像在视图的边界内  
+	if (x + imageWidth > pDC->GetDeviceCaps(HORZRES)) {
+		x = pDC->GetDeviceCaps(HORZRES) - imageWidth;
+	}
+	if (y + imageHeight > pDC->GetDeviceCaps(VERTRES)) {
+		y = pDC->GetDeviceCaps(VERTRES) - imageHeight;
+	}
+
+	// 创建一个与位图兼容的内存DC  
+	CDC memDC;
+	memDC.CreateCompatibleDC(pDC);
+	CBitmap* pOldBitmap = memDC.SelectObject(&bitmap);
+
+	// 将位图绘制到设备上下文上  
+	//pDC->BitBlt(x, y, imageWidth, imageHeight, &memDC, 0, 0, SRCCOPY);
+	pDC->StretchBlt(x, y, width, height, &memDC, 0, 0, imageWidth, imageHeight, SRCCOPY);
+
+	// 恢复内存DC的原始位图  
+	memDC.SelectObject(pOldBitmap);
+}
+
+std::vector<CString> ReadTxt(CString filepath)
+{
+	//返回对象
+	std::vector<CString> txt;
+	CStdioFile FileRead;
+	if (!(FileRead.Open(filepath, CFile::modeRead | CFile::typeText)))
+	{
+		MessageBox(NULL, _T("请选择有效文件"), _T("错误"), 0);
+		return txt;
+	}
+	//一行数据
+	CString cstrValue;
+	while (FileRead.ReadString(cstrValue))
+	{
+		txt.push_back(cstrValue);
+	}
+	FileRead.Close();
+	return txt;
+}
+
+template<typename T>
+inline void ChangeWindow(CDialogEx* context, int cstatic, int winid)
+{
+	T* dlg = new T();
+	//创建窗口
+	dlg->Create(winid, context);
+	//获取CStatic的位置窗口
+	CRect re;
+	((CStatic*)context->GetDlgItem(cstatic))->GetWindowRect(&re);
+	//坐标系转换
+	context->ScreenToClient(re);
+	//移动
+	dlg->MoveWindow(re);
+	//显示
+	dlg->ShowWindow(SW_SHOW);
 }
