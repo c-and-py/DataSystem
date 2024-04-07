@@ -14,7 +14,13 @@ IMPLEMENT_DYNAMIC(LoginDlg, CDialogEx)
 LoginDlg::LoginDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_LOGIN, pParent)
 {
-
+	//可删，在初始化时直接进行数据库连接
+	if (ConnectSQL("SQL", "ZDAdmin", "123456")) {
+		MessageBox(_T("连接数据库成功"));
+	}
+	else {
+		MessageBox(_T("连接数据库失败"));
+	};
 }
 
 LoginDlg::~LoginDlg()

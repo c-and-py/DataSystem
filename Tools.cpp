@@ -43,8 +43,8 @@ bool ConnectSQL(std::string datasource, std::string username, std::string passwo
     }
 
     // 释放句柄
-    SQLFreeHandle(SQL_HANDLE_DBC, handledbc);
-    SQLFreeHandle(SQL_HANDLE_ENV, handleenv);
+    //SQLFreeHandle(SQL_HANDLE_DBC, handledbc);
+    //SQLFreeHandle(SQL_HANDLE_ENV, handleenv);
     if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
         return true;
     }
@@ -55,12 +55,21 @@ bool ConnectSQL(std::string datasource, std::string username, std::string passwo
 
 bool ExecuteSQL(std::string sql)
 {
-    //TODO
+	returnmsg = SQLAllocHandle(SQL_HANDLE_STMT, handleenv, &handlestmt);
+	if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
+		std::cout << "语句句柄获取成功!" << std::endl;
+	}
+	else {
+		std::cout << "无法获取语句句柄！" << std::endl;
+		return false;
+	}
     returnmsg = SQLExecDirect(handlestmt, (SQLCHAR*)sql.c_str(), SQL_NTS);
     if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
+		std::cout << "已执行" << sql << std::endl;
         return true;
     }
     else {
+		std::cout << "执行失败" << sql << std::endl;
         return false;
     }
 }

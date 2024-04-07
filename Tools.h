@@ -20,7 +20,6 @@ bool ConnectSQL(std::string datasource,std::string username,std::string password
 
 //执行SQL语句
 //sql:要执行的语句
-//未完成
 bool ExecuteSQL(std::string sql);
 
 //插入一条数据
