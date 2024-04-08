@@ -216,6 +216,11 @@ std::vector<CString> ReadTxt(CString filepath)
 	return txt;
 }
 
+CString Str2Cstr(std::string str)
+{
+	return CString(str.c_str());
+}
+
 template<typename T>
 inline void ChangeWindow(CDialogEx* context, int cstatic, int winid)
 {

@@ -73,4 +73,6 @@ std::vector<CString> ReadTxt(CString filepath);
 template<typename T>
 inline void ChangeWindow(CDialogEx* context, int cstatic, int winid);
 
+//½«std::string×ªÎªCString
+CString Str2Cstr(std::string str);
 #endif // !TOOLS_H

@@ -19,4 +19,12 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedWizfinish();
+	// 数据源
+	CString datasource;
+	// 用户名
+	CString username;
+	// 密码
+	CString password;
 };
