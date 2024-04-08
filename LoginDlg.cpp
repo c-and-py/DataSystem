@@ -6,6 +6,7 @@
 #include "afxdialogex.h"
 #include "LoginDlg.h"
 #include "Tools.h"
+#include"AdminDlg.h"
 
 // LoginDlg 对话框
 
@@ -55,7 +56,9 @@ void LoginDlg::OnBnClickedWizfinish()
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(TRUE);
 	if (ConnectSQL(datasource.GetBuffer(), username.GetBuffer(), password.GetBuffer())) {
+		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATIC, IDD_DIALOGADMIN);
 		MessageBox(_T("登录成功"));
+		delete this;
 	}
 	else {
 		MessageBox(_T("登录失败，请检查数据源、用户名和密码！"));

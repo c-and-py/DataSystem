@@ -42,6 +42,9 @@
     <ClInclude Include="Book.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AdminDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataSystem.cpp">
@@ -60,6 +63,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Book.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AdminDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

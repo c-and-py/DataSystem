@@ -70,8 +70,23 @@ std::vector<CString> ReadTxt(CString filepath);
 //context:包含picturecontrol的类，一般填this
 //cstatic:picturecontrol的id
 //winid:窗口id
+//定义在.h中
 template<typename T>
-inline void ChangeWindow(CDialogEx* context, int cstatic, int winid);
+void ChangeWindow(CDialogEx* context, int cstatic, int winid)
+{
+	T* dlg = new T();
+	//创建窗口
+	dlg->Create(winid, context);
+	//获取CStatic的位置窗口
+	CRect re;
+	((CStatic*)context->GetDlgItem(cstatic))->GetWindowRect(&re);
+	//坐标系转换
+	context->ScreenToClient(re);
+	//移动
+	dlg->MoveWindow(re);
+	//显示
+	dlg->ShowWindow(SW_SHOW);
+}
 
 //将std::string转为CString
 CString Str2Cstr(std::string str);
