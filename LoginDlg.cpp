@@ -17,6 +17,9 @@ LoginDlg::LoginDlg(CWnd* pParent /*=nullptr*/)
 	//可删，在初始化时直接进行数据库连接
 	if (ConnectSQL("SQL", "ZDAdmin", "123456")) {
 		MessageBox(_T("连接数据库成功"));
+		if (ExecuteSQL("create table testtable(id int,value int);")) {
+			MessageBox(_T("创建成功"));
+		};
 	}
 	else {
 		MessageBox(_T("连接数据库失败"));

@@ -11,6 +11,11 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
+struct Column {
+	std::string columnname;
+	std::string datatype;
+};
+
 //链接数据库
 //datasource:数据源
 //username:用户名
@@ -21,6 +26,15 @@ bool ConnectSQL(std::string datasource,std::string username,std::string password
 //执行SQL语句
 //sql:要执行的语句
 bool ExecuteSQL(std::string sql);
+
+//创建表
+//tablename:表名
+//columns:列数组
+bool CreateTable(std::string tablename, std::vector<Column> columns);
+
+//查询所有表
+//未完成
+bool ShowTables();
 
 //插入一条数据
 //未完成

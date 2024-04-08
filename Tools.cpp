@@ -55,7 +55,7 @@ bool ConnectSQL(std::string datasource, std::string username, std::string passwo
 
 bool ExecuteSQL(std::string sql)
 {
-	returnmsg = SQLAllocHandle(SQL_HANDLE_STMT, handleenv, &handlestmt);
+	returnmsg = SQLAllocHandle(SQL_HANDLE_STMT, handledbc, &handlestmt);
 	if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
 		std::cout << "语句句柄获取成功!" << std::endl;
 	}
@@ -72,6 +72,32 @@ bool ExecuteSQL(std::string sql)
 		std::cout << "执行失败" << sql << std::endl;
         return false;
     }
+}
+
+bool CreateTable(std::string tablename, std::vector<Column> columns)
+{
+	//拼装create语句
+	std::string sql = "create table\t" + tablename + "(";
+	for (int i = 0; i < columns.size(); i++) {
+		sql += columns[i].columnname + "\t" + columns[i].datatype;
+		if (i != columns.size() - 1)sql += ",";
+	}
+	sql += ")";
+	//执行语句
+	if (ExecuteSQL(sql)) {
+		std::cout << "创建" << tablename << "表成功" << std::endl;
+		return true;
+	}
+	else {
+		std::cout << "创建" << tablename << "表失败" << std::endl;
+		return false;
+	}
+}
+
+bool ShowTables()
+{
+	ExecuteSQL("select name from sys.tables;");
+	return true;
 }
 
 bool Insert()
