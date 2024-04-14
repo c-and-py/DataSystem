@@ -125,6 +125,15 @@ bool CreateReaderTable(std::string tablename)
 	return false;
 }
 
+bool CreateReaderTable()
+{
+	std::string sql = "create view ReaderView  as(select 读者证号, 姓名, Books.名称, 借书日期, 借书日期 + 借书时长 as 还书日期, 借书时长 from Readers, Books where Readers.借书ISBN = Books.ISBN); ";
+	if(ExecuteSQL(sql)){
+		return true;
+	}
+	return false;
+}
+
 bool ShowTables()
 {
 	ExecuteSQL("select name from sys.tables;");
