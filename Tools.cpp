@@ -94,6 +94,22 @@ bool CreateTable(std::string tablename, std::vector<Column> columns)
 	}
 }
 
+bool CreateBookTable(std::string tablename)
+{
+	std::vector<Column> columns;
+	columns.push_back(Column("ISBN", "nchar(20)"));
+	columns.push_back(Column("名称", "nchar(20)"));
+	columns.push_back(Column("作者", "nchar(20)"));
+	columns.push_back(Column("余量", "int"));
+	columns.push_back(Column("总量", "int"));
+	columns.push_back(Column("入库日期", "datetime"));
+	columns.push_back(Column("出版社", "nchar(20)"));
+	if (CreateTable(tablename, columns)) {
+		return true;
+	}
+	return false;
+}
+
 bool ShowTables()
 {
 	ExecuteSQL("select name from sys.tables;");
@@ -219,4 +235,10 @@ std::vector<CString> ReadTxt(CString filepath)
 CString Str2Cstr(std::string str)
 {
 	return CString(str.c_str());
+}
+
+Column::Column(std::string columnname, std::string datatype)
+{
+	this->columnname = columnname;
+	this->datatype = datatype;
 }

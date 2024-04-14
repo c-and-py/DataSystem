@@ -12,6 +12,8 @@
 #define TOOLS_H
 
 struct Column {
+	Column();
+	Column(std::string columnname, std::string datatype);
 	std::string columnname;
 	std::string datatype;
 };
@@ -31,6 +33,9 @@ bool ExecuteSQL(std::string sql);
 //tablename:表名
 //columns:列数组
 bool CreateTable(std::string tablename, std::vector<Column> columns);
+
+//创建图书表
+bool CreateBookTable(std::string tablename);
 
 //查询所有表
 //未完成
