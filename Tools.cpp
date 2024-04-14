@@ -145,6 +145,26 @@ bool Insert()
 	return false;
 }
 
+bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press)
+{
+	std::string sql;
+	sql = "insert into book values ('" + ISBN + "', '" + name + "', '" + author + "', " + std::to_string(remainnum) + ", " + std::to_string(num) + ", '" + intime + "', '" + press + "');";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
+{
+	std::string sql;
+	sql = "insert into reader values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) + ", N'" + bookISBN + "', '" + borrowDate + "', " + std::to_string(borrowDuration) + ");";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool Delete()
 {
 	return false;

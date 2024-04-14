@@ -51,6 +51,11 @@ bool ShowTables();
 //未完成
 bool Insert();
 
+//插入书
+bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press);
+//插入读者
+bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration);
+
 //删除数据
 //未完成
 bool Delete();
