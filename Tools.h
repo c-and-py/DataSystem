@@ -36,6 +36,12 @@ bool CreateTable(std::string tablename, std::vector<Column> columns);
 
 //创建图书表
 bool CreateBookTable(std::string tablename);
+//创建读者表
+bool CreateReaderTable(std::string tablename);
+//创建管理员视图
+bool CreateAdminView();
+//创建读者视图
+bool CreateReaderTable();
 
 //查询所有表
 //未完成

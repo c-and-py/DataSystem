@@ -110,6 +110,21 @@ bool CreateBookTable(std::string tablename)
 	return false;
 }
 
+bool CreateReaderTable(std::string tablename)
+{
+	std::vector<Column> columns;
+	columns.push_back(Column("读者证号", "int"));
+	columns.push_back(Column("姓名", "nchar(20)"));
+	columns.push_back(Column("电话", "int"));
+	columns.push_back(Column("借书ISBN", "nchar(20)"));
+	columns.push_back(Column("借书日期", "datetime"));
+	columns.push_back(Column("借书时长", "int"));
+	if (CreateTable(tablename, columns)) {
+		return true;
+	}
+	return false;
+}
+
 bool ShowTables()
 {
 	ExecuteSQL("select name from sys.tables;");
