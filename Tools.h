@@ -55,6 +55,10 @@ bool Insert();
 bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press);
 //插入读者
 bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration);
+//借书
+bool BorrowBook(int readerID, std::string ISBN,int borrowDuration);
+//减少库存
+bool DecreaseBookNum(std::string ISBN, int decreaseNum);
 
 //删除数据
 //未完成

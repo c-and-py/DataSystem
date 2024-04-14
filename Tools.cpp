@@ -165,6 +165,16 @@ bool InsertReader(int readerID, std::string name, int phone, std::string bookISB
 	return false;
 }
 
+bool DecreaseBookNum(std::string ISBN, int decreaseNum)
+{
+	std::string sql;
+	sql = "update book set 余量 = 余量 - " + std::to_string(decreaseNum) + " where ISBN = '" + ISBN + "';";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool Delete()
 {
 	return false;
