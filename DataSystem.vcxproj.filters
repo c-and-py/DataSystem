@@ -45,9 +45,6 @@
     <ClInclude Include="AdminDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CAddDlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="listcontrl.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -75,9 +72,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="listcontrl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CAddDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

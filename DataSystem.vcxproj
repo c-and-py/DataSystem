@@ -188,7 +188,6 @@
   <ItemGroup>
     <ClInclude Include="AdminDlg.h" />
     <ClInclude Include="Book.h" />
-    <ClInclude Include="CAddDlg.h" />
     <ClInclude Include="DataSystem.h" />
     <ClInclude Include="DataSystemDlg.h" />
     <ClInclude Include="framework.h" />
@@ -202,7 +201,6 @@
   <ItemGroup>
     <ClCompile Include="AdminDlg.cpp" />
     <ClCompile Include="Book.cpp" />
-    <ClCompile Include="CAddDlg.cpp" />
     <ClCompile Include="DataSystem.cpp" />
     <ClCompile Include="DataSystemDlg.cpp" />
     <ClCompile Include="listcontrl.cpp" />
