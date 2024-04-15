@@ -186,8 +186,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AddBookDlg.h" />
+    <ClInclude Include="AddReaderDlg.h" />
     <ClInclude Include="AdminDlg.h" />
-    <ClInclude Include="Book.h" />
     <ClInclude Include="DataSystem.h" />
     <ClInclude Include="DataSystemDlg.h" />
     <ClInclude Include="framework.h" />
@@ -199,6 +200,8 @@
     <ClInclude Include="Tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddBookDlg.cpp" />
+    <ClCompile Include="AddReaderDlg.cpp" />
     <ClCompile Include="AdminDlg.cpp" />
     <ClCompile Include="Book.cpp" />
     <ClCompile Include="DataSystem.cpp" />

@@ -39,13 +39,16 @@
     <ClInclude Include="LoginDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Book.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="AdminDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="listcontrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AddBookDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AddReaderDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -72,6 +75,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="listcontrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AddBookDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AddReaderDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
