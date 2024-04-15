@@ -7,7 +7,6 @@
 #include "AdminDlg.h"
 #include "Tools.h"
 #include "LoginDlg.h"
-#include "ListDlg.h"
 #include"AddBookDlg.h"
 #include"AddReaderDlg.h"
 // AdminDlg 对话框
@@ -38,6 +37,9 @@ BEGIN_MESSAGE_MAP(AdminDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTONADDBOOK, &AdminDlg::OnBnClickedButtonaddbook)
 	ON_BN_CLICKED(IDC_BUTTONADDREADER, &AdminDlg::OnBnClickedButtonaddreader)
 	ON_BN_CLICKED(IDC_BUTTONCLEAR, &AdminDlg::OnBnClickedButtonclear)
+	ON_COMMAND(ID_32771, &AdminDlg::OnInsert)
+	ON_COMMAND(ID_32772, &AdminDlg::OnUpdate)
+	ON_COMMAND(ID_32773, &AdminDlg::OnDelete)
 END_MESSAGE_MAP()
 
 
@@ -75,6 +77,7 @@ void AdminDlg::OnNMRClickListAdmin(NMHDR* pNMHDR, LRESULT* pResult)
 void AdminDlg::OnBnClickedButtonqueryallbook()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	OnBnClickedButtonclear();
 	SetListBookMode();
 	std::vector<std::string> rets;
 	int row = 7;
@@ -130,6 +133,7 @@ void AdminDlg::SetListReaderMode()
 void AdminDlg::OnBnClickedButtonallreader()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	OnBnClickedButtonclear();
 	SetListReaderMode();
 	std::vector<std::string> rets;
 	int row = 6;
@@ -168,12 +172,49 @@ void AdminDlg::OnBnClickedButtonaddreader()
 void AdminDlg::OnBnClickedButtonclear()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	try {
-		while (true) {
-			adminlist.DeleteColumn(0);
-		}
+	// 获取列数
+	int nColumns = adminlist.GetHeaderCtrl()->GetItemCount();
+
+	// 逐列删除
+	for (int i = 0; i < nColumns; ++i) {
+		adminlist.DeleteColumn(0);
 	}
-	catch (...) {
-		return;
+	// 清除所有行
+	adminlist.DeleteAllItems();
+}
+
+
+void AdminDlg::OnInsert()
+{
+	// TODO: 在此添加命令处理程序代码
+	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
+	if (nSelectedItem != -1) {
+	}
+	else {
+		// 没有选中的项
+	}
+}
+
+
+void AdminDlg::OnUpdate()
+{
+	// TODO: 在此添加命令处理程序代码
+	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
+	if (nSelectedItem != -1) {
+	}
+	else {
+		// 没有选中的项
+	}
+}
+
+
+void AdminDlg::OnDelete()
+{
+	// TODO: 在此添加命令处理程序代码
+	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
+	if (nSelectedItem != -1) {
+	}
+	else {
+		// 没有选中的项
 	}
 }

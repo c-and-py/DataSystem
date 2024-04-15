@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-#include "ListDlg.h"
 
 // AdminDlg 对话框
 
@@ -32,4 +31,7 @@ public:
 	afx_msg void OnBnClickedButtonaddbook();
 	afx_msg void OnBnClickedButtonaddreader();
 	afx_msg void OnBnClickedButtonclear();
+	afx_msg void OnInsert();
+	afx_msg void OnUpdate();
+	afx_msg void OnDelete();
 };

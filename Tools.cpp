@@ -243,6 +243,7 @@ bool GetResult(std::vector<SQLCHAR*> rets,const int& row)
 }
 
 bool FetchData(std::vector<std::string>& rets, const int& col) {
+	rets.clear();
 	SQLCHAR** datas = new SQLCHAR * [col];
 	SQLLEN cbData;
 	for (int i = 0; i < col; i++) {
@@ -250,7 +251,7 @@ bool FetchData(std::vector<std::string>& rets, const int& col) {
 		SQLBindCol(handlestmt, i + 1, SQL_C_CHAR, datas[i], 30, &cbData);
 	}
 
-	SQLFetchScroll(handlestmt, SQL_FETCH_FIRST, 0);
+	//SQLFetchScroll(handlestmt, SQL_FETCH_FIRST, 0);
 	// Fetch data
 	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
 		for (int i = 0; i < col; i++) {

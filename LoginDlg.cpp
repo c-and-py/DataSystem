@@ -7,7 +7,6 @@
 #include "LoginDlg.h"
 #include "Tools.h"
 #include"AdminDlg.h"
-#include "ListDlg.h"
 
 // LoginDlg 对话框
 
