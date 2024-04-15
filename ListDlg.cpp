@@ -14,7 +14,6 @@ IMPLEMENT_DYNAMIC(ListDlg, CDialogEx)
 ListDlg::ListDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOGLIST, pParent)
 {
-	table.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 }
 
 ListDlg::~ListDlg()

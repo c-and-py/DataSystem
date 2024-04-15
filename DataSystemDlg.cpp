@@ -10,6 +10,7 @@
 #include"Tools.h"
 #include "LoginDlg.h"
 #include "AdminDlg.h"
+#include "ListDlg.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -105,7 +106,11 @@ BOOL CDataSystemDlg::OnInitDialog()
 	//LoginDlg* logindlg = new LoginDlg();
 	//logindlg->Create(IDD_LOGIN);
 	//logindlg->ShowWindow(SW_SHOW);
-	ChangeWindow<LoginDlg>(this, IDC_STATIC, IDD_LOGIN);
+	ChangeWindow<LoginDlg>(this, IDC_STATICMAIN, IDD_LOGIN);
+	//ChangeWindow<ListDlg>(this, IDC_STATICMAIN, IDD_DIALOGLIST);
+	//ListDlg* dlg = new ListDlg();
+	//dlg->Create(IDD_DIALOGLIST);
+	//dlg->ShowWindow(SW_SHOW);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

@@ -2,10 +2,10 @@
 #include"pch.h"
 #include "Tools.h"
 
-SQLRETURN returnmsg = NULL;//返回信息
-SQLHENV handleenv = NULL;//环境句柄
-SQLHDBC handledbc = NULL;//连接句柄
-SQLHSTMT handlestmt = NULL;//语句句柄
+static SQLRETURN returnmsg = NULL;//返回信息
+static SQLHENV handleenv = NULL;//环境句柄
+static SQLHDBC handledbc = NULL;//连接句柄
+static SQLHSTMT handlestmt = NULL;//语句句柄
 
 bool ConnectSQL(std::string datasource, std::string username, std::string password) {
 
@@ -216,6 +216,13 @@ bool GetResult(std::vector<SQLCHAR*> rets,const int& row)
 	//		std::cout << ret[i];
 	//	}
 	//}
+	SQLLEN cb;
+	SQLCHAR* d = new SQLCHAR[30];
+	SQLBindCol(handlestmt, 4, SQL_C_CHAR, d, 30, &cb);
+	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+		int a = 0;
+	}
+
 	SQLCHAR** datas = new SQLCHAR*[30];
 	for (int i = 0; i < row; i++) {
 		datas[i] = new SQLCHAR[30];
@@ -235,6 +242,37 @@ bool GetResult(std::vector<SQLCHAR*> rets,const int& row)
 	return true;
 }
 
+bool FetchData(std::vector<std::string>& rets, const int& col) {
+	SQLCHAR** datas = new SQLCHAR * [col];
+	SQLLEN cbData;
+	for (int i = 0; i < col; i++) {
+		datas[i] = new SQLCHAR[30];
+		SQLBindCol(handlestmt, i + 1, SQL_C_CHAR, datas[i], 30, &cbData);
+	}
+
+	SQLFetchScroll(handlestmt, SQL_FETCH_FIRST, 0);
+	// Fetch data
+	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+		for (int i = 0; i < col; i++) {
+			rets.push_back(reinterpret_cast<const char*>(datas[i]));
+		}
+	}
+	else {
+		// Release memory in case of failure
+		for (int i = 0; i < col; i++) {
+			delete[] datas[i];
+		}
+		delete[] datas;
+		return false;
+	}
+
+	// Release memory
+	for (int i = 0; i < col; i++) {
+		delete[] datas[i];
+	}
+	delete[] datas;
+	return true;
+}
 void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y)
 {
 	// 加载位图资源  

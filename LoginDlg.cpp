@@ -7,6 +7,7 @@
 #include "LoginDlg.h"
 #include "Tools.h"
 #include"AdminDlg.h"
+#include "ListDlg.h"
 
 // LoginDlg 对话框
 
@@ -56,12 +57,12 @@ void LoginDlg::OnBnClickedWizfinish()
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(TRUE);
 	if (ConnectSQL(datasource.GetBuffer(), username.GetBuffer(), password.GetBuffer())) {
-		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATIC, IDD_DIALOGADMIN);
+		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATICMAIN, IDD_DIALOGADMIN);
 		MessageBox(_T("登录成功"));
-		ExecuteSQL("select * from Books;");
-		std::vector<SQLCHAR*> rets;
-		int row = 2;
-		GetResult(rets,row);
+		//ExecuteSQL("select * from Books;");
+		//std::vector<SQLCHAR*> rets;
+		//int row = 1;
+		//GetResult(rets,row);
 		delete this;
 	}
 	else {
@@ -78,7 +79,7 @@ void LoginDlg::OnOK()
 	//CDialogEx::OnOK();
 	UpdateData(TRUE);
 	if (ConnectSQL(datasource.GetBuffer(), username.GetBuffer(), password.GetBuffer())) {
-		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATIC, IDD_DIALOGADMIN);
+		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATICMAIN, IDD_DIALOGADMIN);
 		MessageBox(_T("登录成功"));
 		delete this;
 	}

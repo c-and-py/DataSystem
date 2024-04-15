@@ -74,7 +74,8 @@ bool Update();
 
 //获取一行查询结果
 //rets:数据列
-bool GetResult(std::vector<SQLCHAR*> rets,int &row);
+bool GetResult(std::vector<SQLCHAR*> rets, const int& row);
+bool FetchData(std::vector<std::string>& rets, const int& row);
 
 //在指定位置画图
 //pdc:用GetDc()获取
@@ -107,13 +108,16 @@ void ChangeWindow(CDialogEx* context, int cstatic, int winid)
 	dlg->Create(winid, context);
 	//获取CStatic的位置窗口
 	CRect re;
-	((CStatic*)context->GetDlgItem(cstatic))->GetWindowRect(&re);
+	((CStatic*)(context->GetDlgItem(cstatic)))->GetWindowRect(&re);
 	//坐标系转换
 	context->ScreenToClient(re);
 	//移动
 	dlg->MoveWindow(re);
 	//显示
 	dlg->ShowWindow(SW_SHOW);
+
+	dlg->ModifyStyleEx(0, WS_EX_CONTROLPARENT);
+	//return dlg;
 }
 
 //将std::string转为CString

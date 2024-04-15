@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-
+#include "ListDlg.h"
 
 // AdminDlg 对话框
 
@@ -23,4 +23,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual void OnOK();
+	afx_msg void OnNMRClickListAdmin(NMHDR* pNMHDR, LRESULT* pResult);
+	CListCtrl adminlist;
+	afx_msg void OnBnClickedButtonqueryallbook();
+	void SetListBookMode();
+	void SetListReaderMode();
+	afx_msg void OnBnClickedButtonallreader();
+	afx_msg void OnBnClickedButtonaddbook();
+	afx_msg void OnBnClickedButtonaddreader();
+	afx_msg void OnBnClickedButtonclear();
 };
