@@ -53,8 +53,12 @@ bool Insert();
 
 //插入书
 bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press);
+//删除书
+bool DeleteBook(std::string ISBN);
 //插入读者
 bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration);
+//删除读者
+bool DeleteReader(int readerID);
 //借书
 bool BorrowBook(int readerID, std::string ISBN,int borrowDuration);
 //减少库存
@@ -70,7 +74,7 @@ bool Update();
 
 //获取一行查询结果
 //rets:数据列
-bool Select(std::vector<SQLCHAR*> rets,int &row);
+bool GetResult(std::vector<SQLCHAR*> rets,int &row);
 
 //在指定位置画图
 //pdc:用GetDc()获取

@@ -155,10 +155,29 @@ bool InsertBook(std::string ISBN, std::string name, std::string author, int rema
 	return false;
 }
 
+bool DeleteBook(std::string ISBN) {
+	std::string sql;
+	sql = "delete from Books where ISBN='" + ISBN + "';";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
 {
 	std::string sql;
 	sql = "insert into Readers values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) + ", N'" + bookISBN + "', '" + borrowDate + "', " + std::to_string(borrowDuration) + ");";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool DeleteReader(int readerID)
+{
+	std::string sql;
+	sql = "delete from Readers where readerID='" + std::to_string(readerID) + "';";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
@@ -185,7 +204,7 @@ bool Update()
 	return false;
 }
 
-bool Select(std::vector<SQLCHAR*> rets,const int& row)
+bool GetResult(std::vector<SQLCHAR*> rets,const int& row)
 {
 	//SQLLEN cbData;
 	//for (int i = 0; i < row; i++) {

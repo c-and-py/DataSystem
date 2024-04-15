@@ -61,7 +61,7 @@ void LoginDlg::OnBnClickedWizfinish()
 		ExecuteSQL("select * from Books;");
 		std::vector<SQLCHAR*> rets;
 		int row = 2;
-		Select(rets,row);
+		GetResult(rets,row);
 		delete this;
 	}
 	else {

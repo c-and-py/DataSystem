@@ -5,7 +5,7 @@
 #include "DataSystem.h"
 #include "afxdialogex.h"
 #include "AddReaderDlg.h"
-
+#include "Tools.h"
 
 // AddReaderDlg 对话框
 

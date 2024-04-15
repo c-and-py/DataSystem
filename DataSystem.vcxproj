@@ -203,7 +203,6 @@
     <ClCompile Include="AddBookDlg.cpp" />
     <ClCompile Include="AddReaderDlg.cpp" />
     <ClCompile Include="AdminDlg.cpp" />
-    <ClCompile Include="Book.cpp" />
     <ClCompile Include="DataSystem.cpp" />
     <ClCompile Include="DataSystemDlg.cpp" />
     <ClCompile Include="listcontrl.cpp" />
