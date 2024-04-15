@@ -45,10 +45,10 @@
     <ClInclude Include="AdminDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\DataSystem2\listcontrl.h">
+    <ClInclude Include="CAddDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\DataSystem2\CAddDlg.h">
+    <ClInclude Include="listcontrl.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,10 +74,10 @@
     <ClCompile Include="AdminDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\DataSystem2\listcontrl.cpp">
+    <ClCompile Include="listcontrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\DataSystem2\CAddDlg.cpp">
+    <ClCompile Include="CAddDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
