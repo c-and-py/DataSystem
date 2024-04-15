@@ -95,5 +95,11 @@
     <Image Include="res\DataSystem.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="bookicon.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="bookicon.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

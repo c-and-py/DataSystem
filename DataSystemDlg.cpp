@@ -55,7 +55,7 @@ END_MESSAGE_MAP()
 CDataSystemDlg::CDataSystemDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DATASYSTEM_DIALOG, pParent)
 {
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICONBOOK);
 }
 
 void CDataSystemDlg::DoDataExchange(CDataExchange* pDX)

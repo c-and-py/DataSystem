@@ -216,7 +216,7 @@ bool GetResult(std::vector<SQLCHAR*> rets,const int& row)
 	//		std::cout << ret[i];
 	//	}
 	//}
-	SQLCHAR** datas;
+	SQLCHAR** datas = new SQLCHAR*[30];
 	for (int i = 0; i < row; i++) {
 		datas[i] = new SQLCHAR[30];
 	}

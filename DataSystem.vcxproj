@@ -222,6 +222,8 @@
     <None Include="res\DataSystem.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="bookicon.bmp" />
+    <Image Include="bookicon.ico" />
     <Image Include="res\DataSystem.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
