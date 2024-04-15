@@ -186,6 +186,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\DataSystem2\CAddDlg.h" />
+    <ClInclude Include="..\DataSystem2\listcontrl.h" />
     <ClInclude Include="AdminDlg.h" />
     <ClInclude Include="Book.h" />
     <ClInclude Include="DataSystem.h" />
@@ -198,6 +200,8 @@
     <ClInclude Include="Tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\DataSystem2\CAddDlg.cpp" />
+    <ClCompile Include="..\DataSystem2\listcontrl.cpp" />
     <ClCompile Include="AdminDlg.cpp" />
     <ClCompile Include="Book.cpp" />
     <ClCompile Include="DataSystem.cpp" />
