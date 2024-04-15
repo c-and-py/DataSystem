@@ -27,4 +27,5 @@ public:
 	CString username;
 	// 密码
 	CString password;
+	virtual void OnOK();
 };

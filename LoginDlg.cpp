@@ -58,6 +58,28 @@ void LoginDlg::OnBnClickedWizfinish()
 	if (ConnectSQL(datasource.GetBuffer(), username.GetBuffer(), password.GetBuffer())) {
 		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATIC, IDD_DIALOGADMIN);
 		MessageBox(_T("登录成功"));
+		ExecuteSQL("select * from Books;");
+		SQLCHAR** ret = new SQLCHAR*[30];
+		int row = 2;
+		Select(ret,row);
+		delete this;
+	}
+	else {
+		MessageBox(_T("登录失败，请检查数据源、用户名和密码！"));
+	};
+}
+
+
+//回车时调用
+void LoginDlg::OnOK()
+{
+	// TODO: 在此添加专用代码和/或调用基类
+
+	//CDialogEx::OnOK();
+	UpdateData(TRUE);
+	if (ConnectSQL(datasource.GetBuffer(), username.GetBuffer(), password.GetBuffer())) {
+		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATIC, IDD_DIALOGADMIN);
+		MessageBox(_T("登录成功"));
 		delete this;
 	}
 	else {

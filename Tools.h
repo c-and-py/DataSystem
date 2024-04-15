@@ -68,6 +68,10 @@ bool Delete();
 //未完成
 bool Update();
 
+//查找数据
+//未完成
+bool Select(SQLCHAR** &ret,int &row);
+
 //在指定位置画图
 //pdc:用GetDc()获取
 //imageResourceId:图像id

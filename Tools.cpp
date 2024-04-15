@@ -148,7 +148,7 @@ bool Insert()
 bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press)
 {
 	std::string sql;
-	sql = "insert into book values ('" + ISBN + "', '" + name + "', '" + author + "', " + std::to_string(remainnum) + ", " + std::to_string(num) + ", '" + intime + "', '" + press + "');";
+	sql = "insert into Books values ('" + ISBN + "', '" + name + "', '" + author + "', " + std::to_string(remainnum) + ", " + std::to_string(num) + ", '" + intime + "', '" + press + "');";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
@@ -158,7 +158,7 @@ bool InsertBook(std::string ISBN, std::string name, std::string author, int rema
 bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
 {
 	std::string sql;
-	sql = "insert into reader values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) + ", N'" + bookISBN + "', '" + borrowDate + "', " + std::to_string(borrowDuration) + ");";
+	sql = "insert into Readers values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) + ", N'" + bookISBN + "', '" + borrowDate + "', " + std::to_string(borrowDuration) + ");";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
@@ -182,6 +182,27 @@ bool Delete()
 
 bool Update()
 {
+	return false;
+}
+
+bool Select(SQLCHAR**& ret, int& row)
+{
+	//SQLLEN cbData;
+	//for (int i = 0; i < row; i++) {
+	//	ret[i] = new SQLCHAR[30];
+	//	SQLBindCol(handlestmt, i, SQL_C_CHAR, ret[i], 30, &cbData);
+	//}
+	//for (int i = 0; i < row; i++) {
+	//	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+	//		std::cout << ret[i];
+	//	}
+	//}
+	SQLCHAR* rets = new SQLCHAR[30];
+	SQLLEN cbData;
+	SQLBindCol(handlestmt, 1, SQL_C_CHAR, rets, 30, &cbData);
+	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+		std::cout << rets;
+	}
 	return false;
 }
 
