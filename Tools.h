@@ -12,6 +12,8 @@
 #define TOOLS_H
 
 struct Column {
+	Column();
+	Column(std::string columnname, std::string datatype);
 	std::string columnname;
 	std::string datatype;
 };
@@ -32,6 +34,15 @@ bool ExecuteSQL(std::string sql);
 //columns:列数组
 bool CreateTable(std::string tablename, std::vector<Column> columns);
 
+//创建图书表
+bool CreateBookTable(std::string tablename);
+//创建读者表
+bool CreateReaderTable(std::string tablename);
+//创建管理员视图
+bool CreateAdminView();
+//创建读者视图
+bool CreateReaderTable();
+
 //查询所有表
 //未完成
 bool ShowTables();
@@ -40,6 +51,15 @@ bool ShowTables();
 //未完成
 bool Insert();
 
+//插入书
+bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press);
+//插入读者
+bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration);
+//借书
+bool BorrowBook(int readerID, std::string ISBN,int borrowDuration);
+//减少库存
+bool DecreaseBookNum(std::string ISBN, int decreaseNum);
+
 //删除数据
 //未完成
 bool Delete();
@@ -47,6 +67,10 @@ bool Delete();
 //更新数据
 //未完成
 bool Update();
+
+//查找数据
+//未完成
+bool Select(SQLCHAR** &ret,int &row);
 
 //在指定位置画图
 //pdc:用GetDc()获取

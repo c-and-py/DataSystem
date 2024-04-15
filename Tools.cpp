@@ -94,6 +94,46 @@ bool CreateTable(std::string tablename, std::vector<Column> columns)
 	}
 }
 
+bool CreateBookTable(std::string tablename)
+{
+	std::vector<Column> columns;
+	columns.push_back(Column("ISBN", "nchar(20)"));
+	columns.push_back(Column("名称", "nchar(20)"));
+	columns.push_back(Column("作者", "nchar(20)"));
+	columns.push_back(Column("余量", "int"));
+	columns.push_back(Column("总量", "int"));
+	columns.push_back(Column("入库日期", "datetime"));
+	columns.push_back(Column("出版社", "nchar(20)"));
+	if (CreateTable(tablename, columns)) {
+		return true;
+	}
+	return false;
+}
+
+bool CreateReaderTable(std::string tablename)
+{
+	std::vector<Column> columns;
+	columns.push_back(Column("读者证号", "int"));
+	columns.push_back(Column("姓名", "nchar(20)"));
+	columns.push_back(Column("电话", "int"));
+	columns.push_back(Column("借书ISBN", "nchar(20)"));
+	columns.push_back(Column("借书日期", "datetime"));
+	columns.push_back(Column("借书时长", "int"));
+	if (CreateTable(tablename, columns)) {
+		return true;
+	}
+	return false;
+}
+
+bool CreateReaderTable()
+{
+	std::string sql = "create view ReaderView  as(select 读者证号, 姓名, Books.名称, 借书日期, 借书日期 + 借书时长 as 还书日期, 借书时长 from Readers, Books where Readers.借书ISBN = Books.ISBN); ";
+	if(ExecuteSQL(sql)){
+		return true;
+	}
+	return false;
+}
+
 bool ShowTables()
 {
 	ExecuteSQL("select name from sys.tables;");
@@ -105,6 +145,36 @@ bool Insert()
 	return false;
 }
 
+bool InsertBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press)
+{
+	std::string sql;
+	sql = "insert into Books values ('" + ISBN + "', '" + name + "', '" + author + "', " + std::to_string(remainnum) + ", " + std::to_string(num) + ", '" + intime + "', '" + press + "');";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
+{
+	std::string sql;
+	sql = "insert into Readers values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) + ", N'" + bookISBN + "', '" + borrowDate + "', " + std::to_string(borrowDuration) + ");";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool DecreaseBookNum(std::string ISBN, int decreaseNum)
+{
+	std::string sql;
+	sql = "update book set 余量 = 余量 - " + std::to_string(decreaseNum) + " where ISBN = '" + ISBN + "';";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool Delete()
 {
 	return false;
@@ -112,6 +182,27 @@ bool Delete()
 
 bool Update()
 {
+	return false;
+}
+
+bool Select(SQLCHAR**& ret, int& row)
+{
+	//SQLLEN cbData;
+	//for (int i = 0; i < row; i++) {
+	//	ret[i] = new SQLCHAR[30];
+	//	SQLBindCol(handlestmt, i, SQL_C_CHAR, ret[i], 30, &cbData);
+	//}
+	//for (int i = 0; i < row; i++) {
+	//	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+	//		std::cout << ret[i];
+	//	}
+	//}
+	SQLCHAR* rets = new SQLCHAR[30];
+	SQLLEN cbData;
+	SQLBindCol(handlestmt, 1, SQL_C_CHAR, rets, 30, &cbData);
+	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+		std::cout << rets;
+	}
 	return false;
 }
 
@@ -219,4 +310,10 @@ std::vector<CString> ReadTxt(CString filepath)
 CString Str2Cstr(std::string str)
 {
 	return CString(str.c_str());
+}
+
+Column::Column(std::string columnname, std::string datatype)
+{
+	this->columnname = columnname;
+	this->datatype = datatype;
 }
