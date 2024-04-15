@@ -185,7 +185,7 @@ bool Update()
 	return false;
 }
 
-bool Select(SQLCHAR**& ret, int& row)
+bool Select(std::vector<SQLCHAR*> rets,const int& row)
 {
 	//SQLLEN cbData;
 	//for (int i = 0; i < row; i++) {
@@ -197,13 +197,23 @@ bool Select(SQLCHAR**& ret, int& row)
 	//		std::cout << ret[i];
 	//	}
 	//}
-	SQLCHAR* rets = new SQLCHAR[30];
-	SQLLEN cbData;
-	SQLBindCol(handlestmt, 1, SQL_C_CHAR, rets, 30, &cbData);
-	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
-		std::cout << rets;
+	SQLCHAR** datas;
+	for (int i = 0; i < row; i++) {
+		datas[i] = new SQLCHAR[30];
 	}
-	return false;
+	SQLLEN cbData;
+	for (int i = 0; i < row; i++) {
+		SQLBindCol(handlestmt, i + 1, SQL_C_CHAR, datas[i], 30, &cbData);
+	}
+	if (SQLFetch(handlestmt) == SQL_SUCCESS) {
+		for (int i = 0; i < row; i++) {
+			rets.push_back(datas[i]);
+		}
+	}
+	else {
+		return false;
+	}
+	return true;
 }
 
 void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y)

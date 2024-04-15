@@ -59,9 +59,9 @@ void LoginDlg::OnBnClickedWizfinish()
 		ChangeWindow<AdminDlg>((CDialogEx*)(this->GetParent()), IDC_STATIC, IDD_DIALOGADMIN);
 		MessageBox(_T("登录成功"));
 		ExecuteSQL("select * from Books;");
-		SQLCHAR** ret = new SQLCHAR*[30];
+		std::vector<SQLCHAR*> rets;
 		int row = 2;
-		Select(ret,row);
+		Select(rets,row);
 		delete this;
 	}
 	else {

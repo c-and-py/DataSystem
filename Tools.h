@@ -68,9 +68,9 @@ bool Delete();
 //未完成
 bool Update();
 
-//查找数据
-//未完成
-bool Select(SQLCHAR** &ret,int &row);
+//获取一行查询结果
+//rets:数据列
+bool Select(std::vector<SQLCHAR*> rets,int &row);
 
 //在指定位置画图
 //pdc:用GetDc()获取
