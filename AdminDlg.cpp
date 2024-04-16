@@ -16,6 +16,7 @@ IMPLEMENT_DYNAMIC(AdminDlg, CDialogEx)
 AdminDlg::AdminDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOGADMIN, pParent)
 {
+	mode = 0;
 }
 
 AdminDlg::~AdminDlg()
@@ -99,6 +100,7 @@ void AdminDlg::OnBnClickedButtonqueryallbook()
 
 void AdminDlg::SetListBookMode()
 {
+	mode = BOOK;
 	adminlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	adminlist.InsertColumn(0, _T("ISBN"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("名称"), LVCFMT_LEFT, 100);
@@ -116,6 +118,7 @@ void AdminDlg::SetListBookMode()
 
 void AdminDlg::SetListReaderMode()
 {
+	mode = READER;
 	adminlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	adminlist.InsertColumn(0, _T("读者证号"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("姓名"), LVCFMT_LEFT, 100);
@@ -181,14 +184,40 @@ void AdminDlg::OnBnClickedButtonclear()
 	}
 	// 清除所有行
 	adminlist.DeleteAllItems();
+
+	mode = NONE;
 }
 
 
 void AdminDlg::OnInsert()
 {
 	// TODO: 在此添加命令处理程序代码
+	AddBookDlg addbookdlg;
+	AddReaderDlg addreaderdlg;
+	INT_PTR nResponse;
 	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
 	if (nSelectedItem != -1) {
+		switch (mode)
+		{
+		case 0:
+			break;
+		case 1:
+			nResponse = addbookdlg.DoModal();
+			if (nResponse = IDOK) {
+				InsertBook(addbookdlg.isbn.GetBuffer(), addbookdlg.bookname.GetBuffer(), addbookdlg.author.GetBuffer(), _ttoi(addbookdlg.num), _ttoi(addbookdlg.totalnum),
+					addbookdlg.intime.GetBuffer(), addbookdlg.press.GetBuffer());
+			}
+			break;
+		case 2:
+			nResponse = addreaderdlg.DoModal();
+			if (nResponse = IDOK) {
+				InsertReader(addreaderdlg.readerid, addreaderdlg.readername.GetBuffer(), addreaderdlg.phone, addreaderdlg.isbn.GetBuffer(),
+					addreaderdlg.borrowtime.GetBuffer(), addreaderdlg.borrowduration);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 	else {
 		// 没有选中的项
@@ -201,6 +230,17 @@ void AdminDlg::OnUpdate()
 	// TODO: 在此添加命令处理程序代码
 	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
 	if (nSelectedItem != -1) {
+		switch (mode)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		default:
+			break;
+		}
 	}
 	else {
 		// 没有选中的项
@@ -213,6 +253,25 @@ void AdminDlg::OnDelete()
 	// TODO: 在此添加命令处理程序代码
 	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
 	if (nSelectedItem != -1) {
+		switch (mode)
+		{
+		case 0:
+			break;
+		case 1:
+		{
+			std::string isbn = adminlist.GetItemText(nSelectedItem, 0).GetBuffer();
+			DeleteBook(isbn);
+		}
+			break;
+		case 2:
+		{
+			int readerid = _ttoi(adminlist.GetItemText(nSelectedItem, 0));
+			DeleteReader(readerid);
+		}
+			break;
+		default:
+			break;
+		}
 	}
 	else {
 		// 没有选中的项

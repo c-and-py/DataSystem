@@ -34,4 +34,8 @@ public:
 	afx_msg void OnInsert();
 	afx_msg void OnUpdate();
 	afx_msg void OnDelete();
+	const int NONE = 0;
+	const int BOOK = 1;
+	const int READER = 2;
+	int mode = 0;
 };

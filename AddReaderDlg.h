@@ -21,4 +21,11 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	int readerid;
+	CString readername;
+	int phone;
+	CString isbn;
+	CString borrowtime;
+	int borrowduration;
 };

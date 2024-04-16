@@ -13,6 +13,13 @@ IMPLEMENT_DYNAMIC(AddBookDlg, CDialogEx)
 
 AddBookDlg::AddBookDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOGADDBOOK, pParent)
+	, bookname(_T(""))
+	, isbn(_T(""))
+	, author(_T(""))
+	, intime(_T(""))
+	, num(_T(""))
+	, press(_T(""))
+	, totalnum(_T(""))
 {
 
 }
@@ -24,6 +31,13 @@ AddBookDlg::~AddBookDlg()
 void AddBookDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT1, bookname);
+	DDX_Text(pDX, IDC_EDIT2, isbn);
+	DDX_Text(pDX, IDC_EDIT3, author);
+	DDX_Text(pDX, IDC_EDIT4, intime);
+	DDX_Text(pDX, IDC_EDIT5, num);
+	DDX_Text(pDX, IDC_EDIT6, press);
+	DDX_Text(pDX, IDC_EDIT7, totalnum);
 }
 
 
