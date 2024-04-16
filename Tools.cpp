@@ -80,7 +80,12 @@ bool CreateTable(std::string tablename, std::vector<Column> columns)
 	std::string sql = "create table\t" + tablename + "(";
 	for (int i = 0; i < columns.size(); i++) {
 		sql += columns[i].columnname + "\t" + columns[i].datatype;
-		if (i != columns.size() - 1)sql += ",";
+		if (i == 0) {
+			sql += " primary key";
+		}
+		if (i != columns.size() - 1) {
+			sql += ",";
+		}
 	}
 	sql += ")";
 	//执行语句
@@ -125,6 +130,14 @@ bool CreateReaderTable(std::string tablename)
 	return false;
 }
 
+bool ForeignKeyISBN()
+{
+	if (ExecuteSQL("alter table Readers add constraint ISBNrefer foreign key(借书ISBN) references Books(ISBN);")) {
+		return true;
+	}
+	return false;
+}
+
 bool CreateReaderTable()
 {
 	std::string sql = "create view ReaderView  as(select 读者证号, 姓名, Books.名称, 借书日期, 借书日期 + 借书时长 as 还书日期, 借书时长 from Readers, Books where Readers.借书ISBN = Books.ISBN); ";
@@ -164,6 +177,17 @@ bool DeleteBook(std::string ISBN) {
 	return false;
 }
 
+bool UpdateBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press)
+{
+	std::string sql;
+	sql = "update  Books set 名称='" + name + "',作者='" + author + "',余量=" + std::to_string(remainnum) + ",总量="+ std::to_string(num) +
+		",入库日期='"+ intime +"',出版社='"+ press +"' where ISBN='" + ISBN + "';";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
 {
 	std::string sql;
@@ -177,7 +201,18 @@ bool InsertReader(int readerID, std::string name, int phone, std::string bookISB
 bool DeleteReader(int readerID)
 {
 	std::string sql;
-	sql = "delete from Readers where readerID='" + std::to_string(readerID) + "';";
+	sql = "delete from Readers where 读者证号=" + std::to_string(readerID) + ";";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool UpdateReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
+{
+	std::string sql;
+	sql = "update  Readers set 姓名='" + name + "',电话=" + std::to_string(phone) + ",借书ISBN='" + bookISBN + "',借书日期='" + borrowDate +
+		"',借书时长=" + std::to_string(borrowDuration) + " where 读者证号=" + std::to_string(readerID) + ";";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
