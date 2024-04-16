@@ -79,20 +79,24 @@ bool ExecuteSQL(std::string sql)
     }
 }
 
-bool CreateTable(std::string tablename, std::vector<Column> columns)
+bool CreateTable(std::string tablename, std::vector<Column> columns, int keynum)
 {
 	//拼装create语句
-	std::string sql = "create table\t" + tablename + "(";
+	std::string sql = "create table " + tablename + " (";
 	for (int i = 0; i < columns.size(); i++) {
-		sql += columns[i].columnname + "\t" + columns[i].datatype;
-		if (i == 0) {
-			sql += " primary key";
-		}
+		sql += columns[i].columnname + " " + columns[i].datatype;
 		if (i != columns.size() - 1) {
-			sql += ",";
+			sql += ", ";
 		}
 	}
-	sql += ")";
+	sql += ", PRIMARY KEY (";
+	for (int i = 0; i < keynum; i++) {
+		sql += columns[i].columnname;
+		if (i != keynum - 1) {
+			sql += ", ";
+		}
+	}
+	sql += "));";
 	//执行语句
 	if (ExecuteSQL(sql)) {
 		std::cout << "创建" << tablename << "表成功" << std::endl;
@@ -139,7 +143,7 @@ bool CreateBorrowTable(std::string tablename)
 	columns.push_back(Column("借书ISBN", "nchar(20)"));
 	columns.push_back(Column("借书日期", "datetime"));
 	columns.push_back(Column("借书时长", "int"));
-	if (CreateTable(tablename, columns)) {
+	if (CreateTable(tablename, columns,2)) {
 		return true;
 	}
 	return false;
@@ -148,6 +152,38 @@ bool CreateBorrowTable(std::string tablename)
 bool ForeignKeyISBN()
 {
 	if (ExecuteSQL("alter table Borrows add constraint ISBNrefer foreign key(借书ISBN) references Books(ISBN);")) {
+		return true;
+	}
+	return false;
+}
+
+bool ForeignKeyReaderid()
+{
+	if (ExecuteSQL("alter table Borrows add constraint readerid foreign key(读者证号) references Readers(读者证号);")) {
+		return true;
+	}
+	return false;
+}
+
+bool CreateBorrowTrigger()
+{
+	std::string sql = R"(create trigger addborrow on Borrows instead of insert as 
+		begin
+			declare @@readerid int
+			declare @@isbn nchar(20)
+			declare @@borrowtime datetime
+			declare @@duration int
+			declare @@num int
+			select @@readerid=读者证号,@@isbn=借书ISBN,@@borrowtime=借书日期,@@duration=借书时长 from inserted;
+			select @@num=余量 from Books where ISBN=@@isbn;
+			if @@num>0
+				begin
+					insert into Borrows values (@@readerid,@@isbn,@@borrowtime,@@duration);
+					update Books set 余量=@@num-1 where ISBN=@@isbn;
+				end
+		end)";
+
+	if (ExecuteSQL(sql)) {
 		return true;
 	}
 	return false;

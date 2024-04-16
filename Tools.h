@@ -35,7 +35,7 @@ bool ExecuteSQL(std::string sql);
 //创建表
 //tablename:表名
 //columns:列数组
-bool CreateTable(std::string tablename, std::vector<Column> columns);
+bool CreateTable(std::string tablename, std::vector<Column> columns ,int keynum = 1);
 
 //创建图书表
 bool CreateBookTable(std::string tablename);
@@ -45,6 +45,10 @@ bool CreateReaderTable(std::string tablename);
 bool CreateBorrowTable(std::string tablename);
 //图书表与读者表ISBN约束
 bool ForeignKeyISBN();
+//读者证约束
+bool ForeignKeyReaderid();
+//触发器，借书
+bool CreateBorrowTrigger();
 //创建管理员视图
 bool CreateAdminView();
 //创建读者视图
