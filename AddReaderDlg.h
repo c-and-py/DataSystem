@@ -25,7 +25,4 @@ public:
 	int readerid;
 	CString readername;
 	int phone;
-	CString isbn;
-	CString borrowtime;
-	int borrowduration;
 };

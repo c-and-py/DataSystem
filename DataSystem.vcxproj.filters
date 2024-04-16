@@ -48,6 +48,9 @@
     <ClInclude Include="AddReaderDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AddBorrowDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataSystem.cpp">
@@ -72,6 +75,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="AddReaderDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AddBorrowDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

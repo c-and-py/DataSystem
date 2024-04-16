@@ -6,6 +6,9 @@
 #include <sqlext.h> 
 #include<sqltypes.h>
 #include <string>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 #include <vector>
 
 #ifndef TOOLS_H
@@ -38,6 +41,8 @@ bool CreateTable(std::string tablename, std::vector<Column> columns);
 bool CreateBookTable(std::string tablename);
 //创建读者表
 bool CreateReaderTable(std::string tablename);
+//创建借书表
+bool CreateBorrowTable(std::string tablename);
 //图书表与读者表ISBN约束
 bool ForeignKeyISBN();
 //创建管理员视图
@@ -60,13 +65,18 @@ bool DeleteBook(std::string ISBN);
 //更新书
 bool UpdateBook(std::string ISBN, std::string name, std::string author, int remainnum, int num, std::string intime, std::string press);
 //插入读者
-bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration);
+bool InsertReader(int readerID, std::string name, int phone);
 //删除读者
 bool DeleteReader(int readerID);
 //更新读者
-bool UpdateReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration);
+bool UpdateReader(int readerID, std::string name, int phone);
+
 //借书
-bool BorrowBook(int readerID, std::string ISBN,int borrowDuration);
+bool InsertBorrow(int readerID, std::string ISBN, std::string borrowtime,int duration);
+
+bool DeleteBorrow(int readerID);
+bool UpdateBorrow(int readerID, std::string ISBN, int duration);
+//bool BorrowBook(int readerID, std::string ISBN,int borrowDuration);
 //减少库存
 bool DecreaseBookNum(std::string ISBN, int decreaseNum);
 

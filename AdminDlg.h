@@ -27,6 +27,7 @@ public:
 	afx_msg void OnBnClickedButtonqueryallbook();
 	void SetListBookMode();
 	void SetListReaderMode();
+	void SetListBorrowMode();
 	afx_msg void OnBnClickedButtonallreader();
 	afx_msg void OnBnClickedButtonaddbook();
 	afx_msg void OnBnClickedButtonaddreader();
@@ -37,5 +38,8 @@ public:
 	const int NONE = 0;
 	const int BOOK = 1;
 	const int READER = 2;
+	const int BORROW = 3;
 	int mode = 0;
+	afx_msg void OnBnClickedButtonallborrow();
+	afx_msg void OnBnClickedButtonborrow();
 };

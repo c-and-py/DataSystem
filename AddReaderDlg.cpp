@@ -16,9 +16,6 @@ AddReaderDlg::AddReaderDlg(CWnd* pParent /*=nullptr*/)
 	, readerid(0)
 	, readername(_T(""))
 	, phone(0)
-	, isbn(_T(""))
-	, borrowtime(_T(""))
-	, borrowduration(0)
 {
 
 }
@@ -33,9 +30,6 @@ void AddReaderDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, readerid);
 	DDX_Text(pDX, IDC_EDIT2, readername);
 	DDX_Text(pDX, IDC_EDIT3, phone);
-	DDX_Text(pDX, IDC_EDIT4, isbn);
-	DDX_Text(pDX, IDC_EDIT5, borrowtime);
-	DDX_Text(pDX, IDC_EDIT6, borrowduration);
 }
 
 

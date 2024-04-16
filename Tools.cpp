@@ -70,7 +70,12 @@ bool ExecuteSQL(std::string sql)
     }
     else {
 		std::cout << "执行失败" << sql << std::endl;
-        return false;
+		SQLCHAR SqlState[6], Msg[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER NativeError;
+		SQLSMALLINT MsgLen;
+		SQLGetDiagRec(SQL_HANDLE_STMT, handlestmt, 1, SqlState, &NativeError, Msg, sizeof(Msg), &MsgLen);
+		std::cout << reinterpret_cast<const char*>(Msg);
+		return false;
     }
 }
 
@@ -98,7 +103,7 @@ bool CreateTable(std::string tablename, std::vector<Column> columns)
 		return false;
 	}
 }
-
+//Books
 bool CreateBookTable(std::string tablename)
 {
 	std::vector<Column> columns;
@@ -114,13 +119,23 @@ bool CreateBookTable(std::string tablename)
 	}
 	return false;
 }
-
+//Readers
 bool CreateReaderTable(std::string tablename)
 {
 	std::vector<Column> columns;
 	columns.push_back(Column("读者证号", "int"));
 	columns.push_back(Column("姓名", "nchar(20)"));
 	columns.push_back(Column("电话", "int"));
+	if (CreateTable(tablename, columns)) {
+		return true;
+	}
+	return false;
+}
+//Borrows
+bool CreateBorrowTable(std::string tablename)
+{
+	std::vector<Column> columns;
+	columns.push_back(Column("读者证号", "int"));
 	columns.push_back(Column("借书ISBN", "nchar(20)"));
 	columns.push_back(Column("借书日期", "datetime"));
 	columns.push_back(Column("借书时长", "int"));
@@ -132,7 +147,7 @@ bool CreateReaderTable(std::string tablename)
 
 bool ForeignKeyISBN()
 {
-	if (ExecuteSQL("alter table Readers add constraint ISBNrefer foreign key(借书ISBN) references Books(ISBN);")) {
+	if (ExecuteSQL("alter table Borrows add constraint ISBNrefer foreign key(借书ISBN) references Books(ISBN);")) {
 		return true;
 	}
 	return false;
@@ -188,10 +203,10 @@ bool UpdateBook(std::string ISBN, std::string name, std::string author, int rema
 	return false;
 }
 
-bool InsertReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
+bool InsertReader(int readerID, std::string name, int phone)
 {
 	std::string sql;
-	sql = "insert into Readers values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) + ", N'" + bookISBN + "', '" + borrowDate + "', " + std::to_string(borrowDuration) + ");";
+	sql = "insert into Readers values (" + std::to_string(readerID) + ", N'" + name + "', " + std::to_string(phone) +  ");";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
@@ -208,11 +223,54 @@ bool DeleteReader(int readerID)
 	return false;
 }
 
-bool UpdateReader(int readerID, std::string name, int phone, std::string bookISBN, std::string borrowDate, int borrowDuration)
+bool UpdateReader(int readerID, std::string name, int phone)
 {
 	std::string sql;
-	sql = "update  Readers set 姓名='" + name + "',电话=" + std::to_string(phone) + ",借书ISBN='" + bookISBN + "',借书日期='" + borrowDate +
-		"',借书时长=" + std::to_string(borrowDuration) + " where 读者证号=" + std::to_string(readerID) + ";";
+	sql = "update  Readers set 姓名='" + name + "',电话=" + std::to_string(phone) + " where 读者证号=" + std::to_string(readerID) + ";";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool InsertBorrow(int readerID, std::string ISBN, std::string borrowtime, int duration)
+{
+	// 获取当前时间
+	std::time_t now = std::time(nullptr);
+	std::tm tm;
+	localtime_s(&tm, &now);
+	std::stringstream ss;
+	ss << std::put_time(&tm, "%Y.%m.%d");
+
+	std::string sql;
+	sql = "insert into Borrows values (" + std::to_string(readerID) + ", '" + ISBN + "', '" + ss.str() + "', " + std::to_string(duration) + ");";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool DeleteBorrow(int readerID)
+{
+	std::string sql;
+	sql = "delete from Borrows where 读者证号=" + std::to_string(readerID) + ";";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool UpdateBorrow(int readerID, std::string ISBN, int duration)
+{
+	// 获取当前时间
+	std::time_t now = std::time(nullptr);
+	std::tm tm;
+	localtime_s(&tm, &now);
+	std::stringstream ss;
+	ss << std::put_time(&tm, "%Y.%m.%d");
+
+	std::string sql;
+	sql = "update Borrows set  借书日期='" + ss.str() + "', 借书时长=" + std::to_string(duration) + " where 读者证号=" + std::to_string(readerID) + " and 借书ISBN='" + ISBN + "';";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
@@ -309,6 +367,7 @@ bool FetchData(std::vector<std::string>& rets, const int& col) {
 	delete[] datas;
 	return true;
 }
+
 void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y)
 {
 	// 加载位图资源  
@@ -349,6 +408,7 @@ void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y)
 	// 恢复内存DC的原始位图  
 	memDC.SelectObject(pOldBitmap);
 }
+
 void DrawResourceImage(CDC* pDC, int imageResourceId, int x, int y, int width, int height)
 {
 	// 加载位图资源  

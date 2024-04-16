@@ -9,6 +9,7 @@
 #include "LoginDlg.h"
 #include"AddBookDlg.h"
 #include"AddReaderDlg.h"
+#include "AddBorrowDlg.h"
 // AdminDlg 对话框
 
 IMPLEMENT_DYNAMIC(AdminDlg, CDialogEx)
@@ -17,6 +18,11 @@ AdminDlg::AdminDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOGADMIN, pParent)
 {
 	mode = 0;
+	if (CreateBookTable("Books") &&
+		CreateReaderTable("Readers") &&
+		CreateBorrowTable("Borrows")) {
+		MessageBox("创建表成功");
+	}
 }
 
 AdminDlg::~AdminDlg()
@@ -41,6 +47,8 @@ BEGIN_MESSAGE_MAP(AdminDlg, CDialogEx)
 	ON_COMMAND(ID_32771, &AdminDlg::OnInsert)
 	ON_COMMAND(ID_32772, &AdminDlg::OnUpdate)
 	ON_COMMAND(ID_32773, &AdminDlg::OnDelete)
+	ON_BN_CLICKED(IDC_BUTTONALLBORROW, &AdminDlg::OnBnClickedButtonallborrow)
+	ON_BN_CLICKED(IDC_BUTTONBORROW, &AdminDlg::OnBnClickedButtonborrow)
 END_MESSAGE_MAP()
 
 
@@ -119,11 +127,21 @@ void AdminDlg::SetListReaderMode()
 {
 	mode = READER;
 	adminlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	adminlist.InsertColumn(0, _T("电话"), LVCFMT_LEFT, 100);
+	adminlist.InsertColumn(0, _T("姓名"), LVCFMT_LEFT, 100);
+	adminlist.InsertColumn(0, _T("读者证号"), LVCFMT_LEFT, 100);
+	CImageList   m_l;
+	m_l.Create(1, 25, TRUE | ILC_COLOR32, 1, 0);   //设置表格的高度 
+	adminlist.SetImageList(&m_l, LVSIL_SMALL);
+}
+
+void AdminDlg::SetListBorrowMode()
+{
+	mode = BORROW;
+	adminlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	adminlist.InsertColumn(0, _T("借书时长"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("借书日期"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("借书ISBN"), LVCFMT_LEFT, 100);
-	adminlist.InsertColumn(0, _T("电话"), LVCFMT_LEFT, 100);
-	adminlist.InsertColumn(0, _T("姓名"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("读者证号"), LVCFMT_LEFT, 100);
 	CImageList   m_l;
 	m_l.Create(1, 25, TRUE | ILC_COLOR32, 1, 0);   //设置表格的高度 
@@ -137,7 +155,7 @@ void AdminDlg::OnBnClickedButtonallreader()
 	OnBnClickedButtonclear();
 	SetListReaderMode();
 	std::vector<std::string> rets;
-	int row = 6;
+	int row = 3;
 	ExecuteSQL("select * from Readers;");
 	//ExecuteSQL("select * from Books;");
 	int i = 0;
@@ -146,13 +164,28 @@ void AdminDlg::OnBnClickedButtonallreader()
 		adminlist.SetItemText(i, 0, Str2Cstr(rets[0]));
 		adminlist.SetItemText(i, 1, Str2Cstr(rets[1]));
 		adminlist.SetItemText(i, 2, Str2Cstr(rets[2]));
-		adminlist.SetItemText(i, 3, Str2Cstr(rets[3]));
-		adminlist.SetItemText(i, 4, Str2Cstr(rets[4]));
-		adminlist.SetItemText(i, 5, Str2Cstr(rets[5]));
 		i++;
 	}
 }
 
+void AdminDlg::OnBnClickedButtonallborrow()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	OnBnClickedButtonclear();
+	SetListBorrowMode();
+	std::vector<std::string> rets;
+	int row = 4;
+	ExecuteSQL("select * from Borrows;");
+	int i = 0;
+	while (FetchData(rets, row)) {
+		adminlist.InsertItem(i, _T(""));
+		adminlist.SetItemText(i, 0, Str2Cstr(rets[0]));
+		adminlist.SetItemText(i, 1, Str2Cstr(rets[1]));
+		adminlist.SetItemText(i, 2, Str2Cstr(rets[2]));
+		adminlist.SetItemText(i, 3, Str2Cstr(rets[3]));
+		i++;
+	}
+}
 
 void AdminDlg::OnBnClickedButtonaddbook()
 {
@@ -179,8 +212,7 @@ void AdminDlg::OnBnClickedButtonaddreader()
 	INT_PTR nResponse;
 	nResponse = dlg.DoModal();
 	if (nResponse == IDOK) {
-		if (InsertReader(dlg.readerid, dlg.readername.GetBuffer(), dlg.phone, dlg.isbn.GetBuffer(),
-			dlg.borrowtime.GetBuffer(), dlg.borrowduration)) {
+		if (InsertReader(dlg.readerid, dlg.readername.GetBuffer(), dlg.phone)) {
 			MessageBox("添加成功");
 		}
 		else {
@@ -224,6 +256,9 @@ void AdminDlg::OnInsert()
 			break;
 		case 2:
 			OnBnClickedButtonaddreader();
+			break;
+		case 3:
+			OnBnClickedButtonaddbook();
 			break;
 		default:
 			break;
@@ -274,14 +309,10 @@ void AdminDlg::OnUpdate()
 			dlg.readerid = _ttoi(adminlist.GetItemText(nSelectedItem, 0).GetBuffer());
 			dlg.readername = adminlist.GetItemText(nSelectedItem, 1).GetBuffer();
 			dlg.phone = _ttoi(adminlist.GetItemText(nSelectedItem, 2).GetBuffer());
-			dlg.isbn = adminlist.GetItemText(nSelectedItem, 3).GetBuffer();
-			dlg.borrowtime = adminlist.GetItemText(nSelectedItem, 4).GetBuffer();
-			dlg.borrowduration = _ttoi(adminlist.GetItemText(nSelectedItem, 5).GetBuffer());
 			//dlg.UpdateData(FALSE);
 			nResponse = dlg.DoModal();
 			if (nResponse == IDOK) {
-				if (UpdateReader(dlg.readerid, dlg.readername.GetBuffer(), dlg.phone, dlg.isbn.GetBuffer(),
-					dlg.borrowtime.GetBuffer(), dlg.borrowduration)) {
+				if (UpdateReader(dlg.readerid, dlg.readername.GetBuffer(), dlg.phone)) {
 					MessageBox(_T("修改成功"));
 				}
 				else {
@@ -290,6 +321,23 @@ void AdminDlg::OnUpdate()
 			}
 		}
 			break;
+		case 3: {
+			AddBorrowDlg dlg;
+			INT_PTR nResponse;
+			dlg.readerID = _ttoi(adminlist.GetItemText(nSelectedItem, 0).GetBuffer());
+			dlg.ISBN = adminlist.GetItemText(nSelectedItem, 1).GetBuffer();
+			dlg.borrowtime = adminlist.GetItemText(nSelectedItem, 2).GetBuffer();
+			dlg.duration = _ttoi(adminlist.GetItemText(nSelectedItem, 3).GetBuffer());
+			nResponse = dlg.DoModal();
+			if (nResponse == IDOK) {
+				if (UpdateBorrow(dlg.readerID, dlg.ISBN.GetBuffer(), dlg.duration)) {
+					MessageBox(_T("修改成功"));
+				}
+				else {
+					MessageBox(_T("修改失败"));
+				}
+			}
+		}
 		default:
 			break;
 		}
@@ -331,11 +379,39 @@ void AdminDlg::OnDelete()
 			}
 		}
 			break;
+		case 3:
+		{
+			int readerid = _ttoi(adminlist.GetItemText(nSelectedItem, 0));
+			if (DeleteBorrow(readerid)) {
+				MessageBox("删除成功");
+			}
+			else {
+				MessageBox("删除失败");
+			}
+		}
+		break;
 		default:
 			break;
 		}
 	}
 	else {
 		// 没有选中的项
+	}
+}
+
+
+void AdminDlg::OnBnClickedButtonborrow()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	AddBorrowDlg dlg;
+	INT_PTR nResponse;
+	nResponse = dlg.DoModal();
+	if (nResponse == IDOK) {
+		if (InsertBorrow(dlg.readerID,dlg.ISBN.GetBuffer(), dlg.borrowtime.GetBuffer(),dlg.duration)) {
+			MessageBox("添加成功");
+		}
+		else {
+			MessageBox("添加失败");
+		}
 	}
 }
