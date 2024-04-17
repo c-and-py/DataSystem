@@ -189,6 +189,50 @@ bool CreateBorrowTrigger()
 	return false;
 }
 
+bool CreateReturnTrigger()
+{
+	std::string sql = R"(create trigger ondeleteborrow on Borrows instead of delete as
+					begin
+						declare @@isbn nchar(20)
+						select @@isbn=借书ISBN from deleted;
+						update Books set 余量=余量+1 where ISBN=@@isbn;
+					end)";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
+bool CreateUpdateTrigger()
+{
+	std::string sql = R"(CREATE TRIGGER onupdateborrow ON Borrows
+		INSTEAD OF UPDATE AS 
+		BEGIN
+			DECLARE @@isbn nchar(20)
+			DECLARE @@oldisbn nchar(20)
+			DECLARE @@readerID int
+			DECLARE @@borrowtime datetime
+			DECLARE @@borrowDuration int
+			SELECT @@isbn=借书ISBN, @@readerID=读者证号, @@borrowDuration=借书时长,@@borrowtime=借书日期 FROM inserted;
+			SELECT @@oldisbn=借书ISBN FROM deleted;
+			IF @@isbn != @@oldisbn
+			BEGIN
+				UPDATE Books
+				SET 余量 = 余量 - 1
+				WHERE ISBN = @@isbn;
+
+				UPDATE Books
+				SET 余量 = 余量 + 1
+				WHERE ISBN = @@oldisbn;
+			END
+			UPDATE Borrows SET 借书ISBN=@@isbn,借书日期=@@borrowtime,借书时长=@@borrowDuration WHERE 读者证号=@@readerID
+		END)";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool CreateReaderTable()
 {
 	std::string sql = "create view ReaderView  as(select 读者证号, 姓名, Books.名称, 借书日期, 借书日期 + 借书时长 as 还书日期, 借书时长 from Readers, Books where Readers.借书ISBN = Books.ISBN); ";

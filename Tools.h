@@ -49,6 +49,10 @@ bool ForeignKeyISBN();
 bool ForeignKeyReaderid();
 //触发器，借书
 bool CreateBorrowTrigger();
+//触发器，还书
+bool CreateReturnTrigger();
+//触发器，更新借书
+bool CreateUpdateTrigger();
 //创建管理员视图
 bool CreateAdminView();
 //创建读者视图

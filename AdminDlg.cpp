@@ -23,6 +23,12 @@ AdminDlg::AdminDlg(CWnd* pParent /*=nullptr*/)
 		CreateBorrowTable("Borrows")) {
 		MessageBox("创建表成功");
 	}
+	if (ForeignKeyISBN() && ForeignKeyReaderid()) {
+		MessageBox("创建外键成功");
+	}
+	if (CreateBorrowTrigger() && CreateReturnTrigger()&&CreateUpdateTrigger()) {
+		MessageBox("创建触发器成功");
+	}
 }
 
 AdminDlg::~AdminDlg()
