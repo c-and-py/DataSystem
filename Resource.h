@@ -33,11 +33,7 @@
 #define IDC_STATICMAIN                  1009
 #define IDC_BUTTONCLEAR                 1009
 #define IDC_LIST2                       1010
-#define IDC_BUTTONQUERY3                1012
 #define IDC_BUTTONALLBORROW             1012
-#define IDC_BUTTON6                     1015
-#define IDC_BUTTON7                     1016
-#define IDC_BUTTON8                     1017
 #define IDC_BUTTON9                     1018
 #define ID_32771                        32771
 #define ID_32772                        32772

@@ -82,7 +82,7 @@ bool UpdateReader(int readerID, std::string name, int phone);
 //ΩË È
 bool InsertBorrow(int readerID, std::string ISBN, std::string borrowtime,int duration);
 
-bool DeleteBorrow(int readerID);
+bool DeleteBorrow(int readerID,std::string isbn);
 bool UpdateBorrow(int readerID, std::string ISBN, int duration);
 //bool BorrowBook(int readerID, std::string ISBN,int borrowDuration);
 //ºı…Ÿø‚¥Ê

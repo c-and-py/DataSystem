@@ -18,16 +18,22 @@ AdminDlg::AdminDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOGADMIN, pParent)
 {
 	mode = 0;
-	if (CreateBookTable("Books") &&
-		CreateReaderTable("Readers") &&
-		CreateBorrowTable("Borrows")) {
-		MessageBox("创建表成功");
+	try
+	{
+		if (CreateBookTable("Books") &&
+			CreateReaderTable("Readers") &&
+			CreateBorrowTable("Borrows")) {
+			MessageBox("创建表成功");
+		}
+		if (ForeignKeyISBN() && ForeignKeyReaderid()) {
+			MessageBox("创建外键成功");
+		}
+		if (CreateBorrowTrigger() && CreateReturnTrigger() && CreateUpdateTrigger()) {
+			MessageBox("创建触发器成功");
+		}
 	}
-	if (ForeignKeyISBN() && ForeignKeyReaderid()) {
-		MessageBox("创建外键成功");
-	}
-	if (CreateBorrowTrigger() && CreateReturnTrigger()&&CreateUpdateTrigger()) {
-		MessageBox("创建触发器成功");
+	catch (...) {
+
 	}
 }
 
@@ -96,7 +102,12 @@ void AdminDlg::OnBnClickedButtonqueryallbook()
 	SetListBookMode();
 	std::vector<std::string> rets;
 	int row = 7;
-	ExecuteSQL("select * from Books;");
+	if (ExecuteSQL("select * from Books;")) {
+		
+	}
+	else {
+		MessageBox("查询失败");
+	}
 	//ExecuteSQL("select * from Books;");
 	int i = 0;
 	while (FetchData(rets, row)) {
@@ -162,7 +173,12 @@ void AdminDlg::OnBnClickedButtonallreader()
 	SetListReaderMode();
 	std::vector<std::string> rets;
 	int row = 3;
-	ExecuteSQL("select * from Readers;");
+	if (ExecuteSQL("select * from Readers;")) {
+
+	}
+	else {
+		MessageBox("查询失败");
+	}
 	//ExecuteSQL("select * from Books;");
 	int i = 0;
 	while (FetchData(rets, row)) {
@@ -181,7 +197,12 @@ void AdminDlg::OnBnClickedButtonallborrow()
 	SetListBorrowMode();
 	std::vector<std::string> rets;
 	int row = 4;
-	ExecuteSQL("select * from Borrows;");
+	if (ExecuteSQL("select * from Borrows;")) {
+
+	}
+	else {
+		MessageBox("查询失败");
+	}
 	int i = 0;
 	while (FetchData(rets, row)) {
 		adminlist.InsertItem(i, _T(""));
@@ -264,7 +285,7 @@ void AdminDlg::OnInsert()
 			OnBnClickedButtonaddreader();
 			break;
 		case 3:
-			OnBnClickedButtonaddbook();
+			OnBnClickedButtonborrow();
 			break;
 		default:
 			break;
@@ -388,8 +409,10 @@ void AdminDlg::OnDelete()
 		case 3:
 		{
 			int readerid = _ttoi(adminlist.GetItemText(nSelectedItem, 0));
-			if (DeleteBorrow(readerid)) {
+			std::string isbn = adminlist.GetItemText(nSelectedItem, 1).GetBuffer();
+			if (DeleteBorrow(readerid,isbn)) {
 				MessageBox("删除成功");
+				std::vector<std::string> ret;
 			}
 			else {
 				MessageBox("删除失败");

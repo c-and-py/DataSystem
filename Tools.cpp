@@ -55,6 +55,10 @@ bool ConnectSQL(std::string datasource, std::string username, std::string passwo
 
 bool ExecuteSQL(std::string sql)
 {
+	if (handlestmt != SQL_NULL_HSTMT) {
+		SQLFreeHandle(SQL_HANDLE_STMT, handlestmt);
+	}
+
 	returnmsg = SQLAllocHandle(SQL_HANDLE_STMT, handledbc, &handlestmt);
 	if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
 		std::cout << "语句句柄获取成功!" << std::endl;
@@ -63,20 +67,21 @@ bool ExecuteSQL(std::string sql)
 		std::cout << "无法获取语句句柄！" << std::endl;
 		return false;
 	}
-    returnmsg = SQLExecDirect(handlestmt, (SQLCHAR*)sql.c_str(), SQL_NTS);
-    if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
+	returnmsg = SQLExecDirect(handlestmt, (SQLCHAR*)sql.c_str(), SQL_NTS);
+	if (returnmsg == SQL_SUCCESS || returnmsg == SQL_SUCCESS_WITH_INFO) {
 		std::cout << "已执行" << sql << std::endl;
-        return true;
-    }
-    else {
+		return true;
+	}
+	else {
 		std::cout << "执行失败" << sql << std::endl;
 		SQLCHAR SqlState[6], Msg[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER NativeError;
 		SQLSMALLINT MsgLen;
 		SQLGetDiagRec(SQL_HANDLE_STMT, handlestmt, 1, SqlState, &NativeError, Msg, sizeof(Msg), &MsgLen);
 		std::cout << reinterpret_cast<const char*>(Msg);
+		throw(reinterpret_cast<const char*>(Msg));
 		return false;
-    }
+	}
 }
 
 bool CreateTable(std::string tablename, std::vector<Column> columns, int keynum)
@@ -192,11 +197,13 @@ bool CreateBorrowTrigger()
 bool CreateReturnTrigger()
 {
 	std::string sql = R"(create trigger ondeleteborrow on Borrows instead of delete as
-					begin
-						declare @@isbn nchar(20)
-						select @@isbn=借书ISBN from deleted;
-						update Books set 余量=余量+1 where ISBN=@@isbn;
-					end)";
+				begin
+					declare @@readerid int;
+					declare @@isbn nchar(20)
+					select @@readerid=读者证号,@@isbn=借书ISBN from deleted;
+					update Books set 余量=余量+1 where ISBN=@@isbn;
+					delete from Borrows where 读者证号=@@readerid and 借书ISBN=@@isbn
+				end;)";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
@@ -330,10 +337,10 @@ bool InsertBorrow(int readerID, std::string ISBN, std::string borrowtime, int du
 	return false;
 }
 
-bool DeleteBorrow(int readerID)
+bool DeleteBorrow(int readerID,std::string isbn)
 {
 	std::string sql;
-	sql = "delete from Borrows where 读者证号=" + std::to_string(readerID) + ";";
+	sql = "delete from Borrows where 读者证号=" + std::to_string(readerID) + " and 借书ISBN="+isbn+";";
 	if (ExecuteSQL(sql)) {
 		return true;
 	}
