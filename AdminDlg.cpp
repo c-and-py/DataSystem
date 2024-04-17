@@ -31,6 +31,9 @@ AdminDlg::AdminDlg(CWnd* pParent /*=nullptr*/)
 		if (CreateBorrowTrigger() && CreateReturnTrigger() && CreateUpdateTrigger()) {
 			MessageBox("创建触发器成功");
 		}
+		if (CreateBorrowView()) {
+			MessageBox("创建视图成功");
+		}
 	}
 	catch (...) {
 
@@ -61,6 +64,10 @@ BEGIN_MESSAGE_MAP(AdminDlg, CDialogEx)
 	ON_COMMAND(ID_32773, &AdminDlg::OnDelete)
 	ON_BN_CLICKED(IDC_BUTTONALLBORROW, &AdminDlg::OnBnClickedButtonallborrow)
 	ON_BN_CLICKED(IDC_BUTTONBORROW, &AdminDlg::OnBnClickedButtonborrow)
+	ON_BN_CLICKED(IDC_BUTTONBORROWVIEW, &AdminDlg::OnBnClickedButtonborrowview)
+	ON_BN_CLICKED(IDC_BUTTONFINDREADER2, &AdminDlg::OnBnClickedButtonfindreader2)
+	ON_BN_CLICKED(IDC_BUTTONFINDBOOK, &AdminDlg::OnBnClickedButtonfindbook)
+	ON_BN_CLICKED(IDC_BUTTONFINDBORROW, &AdminDlg::OnBnClickedButtonfindborrow)
 END_MESSAGE_MAP()
 
 
@@ -160,6 +167,20 @@ void AdminDlg::SetListBorrowMode()
 	adminlist.InsertColumn(0, _T("借书日期"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("借书ISBN"), LVCFMT_LEFT, 100);
 	adminlist.InsertColumn(0, _T("读者证号"), LVCFMT_LEFT, 100);
+	CImageList   m_l;
+	m_l.Create(1, 25, TRUE | ILC_COLOR32, 1, 0);   //设置表格的高度 
+	adminlist.SetImageList(&m_l, LVSIL_SMALL);
+}
+
+void AdminDlg::SetListBorrowViewMode()
+{
+	mode = BORROWVIEW;
+	adminlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	adminlist.InsertColumn(0, _T("电话"), LVCFMT_LEFT, 100);
+	adminlist.InsertColumn(0, _T("还书日期"), LVCFMT_LEFT, 100);
+	adminlist.InsertColumn(0, _T("借书日期"), LVCFMT_LEFT, 100);
+	adminlist.InsertColumn(0, _T("名称"), LVCFMT_LEFT, 100);
+	adminlist.InsertColumn(0, _T("姓名"), LVCFMT_LEFT, 100);
 	CImageList   m_l;
 	m_l.Create(1, 25, TRUE | ILC_COLOR32, 1, 0);   //设置表格的高度 
 	adminlist.SetImageList(&m_l, LVSIL_SMALL);
@@ -271,7 +292,6 @@ void AdminDlg::OnInsert()
 	// TODO: 在此添加命令处理程序代码
 	AddBookDlg addbookdlg;
 	AddReaderDlg addreaderdlg;
-	INT_PTR nResponse;
 	int nSelectedItem = adminlist.GetNextItem(-1, LVNI_SELECTED);
 	if (nSelectedItem != -1) {
 		switch (mode)
@@ -286,6 +306,9 @@ void AdminDlg::OnInsert()
 			break;
 		case 3:
 			OnBnClickedButtonborrow();
+			break;
+		case 4:
+			MessageBox("不支持在当前页面修改");
 			break;
 		default:
 			break;
@@ -365,6 +388,10 @@ void AdminDlg::OnUpdate()
 				}
 			}
 		}
+			  break;
+		case 4:
+			MessageBox("不支持在当前页面修改");
+			break;
 		default:
 			break;
 		}
@@ -419,6 +446,9 @@ void AdminDlg::OnDelete()
 			}
 		}
 		break;
+		case 4:
+			MessageBox("不支持在当前页面修改");
+			break;
 		default:
 			break;
 		}
@@ -441,6 +471,193 @@ void AdminDlg::OnBnClickedButtonborrow()
 		}
 		else {
 			MessageBox("添加失败");
+		}
+	}
+}
+
+
+void AdminDlg::OnBnClickedButtonborrowview()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	OnBnClickedButtonclear();
+	SetListBorrowViewMode();
+	std::vector<std::string> rets;
+	int row = 5;
+	if (ExecuteSQL("select * from borrowview;")) {
+
+	}
+	else {
+		MessageBox("查询失败");
+	}
+	//ExecuteSQL("select * from Books;");
+	int i = 0;
+	while (FetchData(rets, row)) {
+		adminlist.InsertItem(i, _T(""));
+		adminlist.SetItemText(i, 0, Str2Cstr(rets[0]));
+		adminlist.SetItemText(i, 1, Str2Cstr(rets[1]));
+		adminlist.SetItemText(i, 2, Str2Cstr(rets[2]));
+		adminlist.SetItemText(i, 3, Str2Cstr(rets[3]));
+		adminlist.SetItemText(i, 4, Str2Cstr(rets[4]));
+		i++;
+	}
+}
+
+
+void AdminDlg::OnBnClickedButtonfindreader2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	// 创建对话框
+	AddReaderDlg dlg;
+	INT_PTR nResponse;
+
+	// 显示对话框并等待用户点击OK
+	nResponse = dlg.DoModal();
+	if (nResponse == IDOK) {
+		// 从对话框获取读者ID，姓名和电话
+		int readerid = dlg.readerid;
+		std::string readername = dlg.readername.GetBuffer();
+		int phone = dlg.phone;
+
+		// 清除列表
+		OnBnClickedButtonclear();
+		SetListReaderMode();
+
+		std::vector<std::string> rets;
+		int row = 3;
+
+		// 构建SQL查询语句
+		std::string query = "SELECT * FROM Readers WHERE 1=1";
+		if (readerid>0) {
+			query += " AND 读者证号 = '" + std::to_string(readerid) + "'";
+		}
+		if (!readername.empty()) {
+			query += " AND 姓名 = '" + readername + "'";
+		}
+		if (phone!=0) {
+			query += " AND 电话 = '" + std::to_string(phone) + "'";
+		}
+		query += ";";
+
+		// 执行SQL查询
+		if (ExecuteSQL(query.c_str())) {
+			int i = 0;
+			while (FetchData(rets, row)) {
+				adminlist.InsertItem(i, _T(""));
+				adminlist.SetItemText(i, 0, Str2Cstr(rets[0]));
+				adminlist.SetItemText(i, 1, Str2Cstr(rets[1]));
+				adminlist.SetItemText(i, 2, Str2Cstr(rets[2]));
+				i++;
+			}
+		}
+		else {
+			MessageBox("查询失败");
+		}
+	}
+}
+
+
+void AdminDlg::OnBnClickedButtonfindbook()
+{
+	// TODO: 在此添加控件通知处理程序代码
+		// 创建对话框
+	AddBookDlg dlg;
+	INT_PTR nResponse;
+	dlg.intimetext = CString("不可用");
+	dlg.remainnumtext = CString("不可用");
+	dlg.presstext = CString("不可用");
+	dlg.totalnumtext = CString("不可用");
+	// 显示对话框并等待用户点击OK
+	nResponse = dlg.DoModal();
+	if (nResponse == IDOK) {
+		// 从对话框获取书籍的ISBN，书名和作者
+		std::string isbn = dlg.isbn.GetBuffer();
+		std::string bookname = dlg.bookname.GetBuffer();
+		std::string author = dlg.author.GetBuffer();
+
+		// 清除列表
+		OnBnClickedButtonclear();
+		SetListBookMode();
+
+		std::vector<std::string> rets;
+		int row = 7;
+
+		// 构建SQL查询语句
+		std::string query = "SELECT * FROM Books WHERE 1=1";
+		if (!isbn.empty()) {
+			query += " AND ISBN = '" + isbn + "'";
+		}
+		if (!bookname.empty()) {
+			query += " AND 名称 = '" + bookname + "'";
+		}
+		if (!author.empty()) {
+			query += " AND 作者 = '" + author + "'";
+		}
+		query += ";";
+
+		// 执行SQL查询
+		if (ExecuteSQL(query.c_str())) {
+			int i = 0;
+			while (FetchData(rets, row)) {
+				adminlist.InsertItem(i, _T(""));
+				adminlist.SetItemText(i, 0, Str2Cstr(rets[0]));
+				adminlist.SetItemText(i, 1, Str2Cstr(rets[1]));
+				adminlist.SetItemText(i, 2, Str2Cstr(rets[2]));
+				adminlist.SetItemText(i, 3, Str2Cstr(rets[3]));
+				adminlist.SetItemText(i, 4, Str2Cstr(rets[4]));
+				adminlist.SetItemText(i, 5, Str2Cstr(rets[5]));
+				adminlist.SetItemText(i, 6, Str2Cstr(rets[6]));
+				i++;
+			}
+		}
+		else {
+			MessageBox("查询失败");
+		}
+	}
+}
+
+
+void AdminDlg::OnBnClickedButtonfindborrow()
+{
+	// TODO: 在此添加控件通知处理程序代码
+		// 创建对话框
+	AddBorrowDlg dlg;
+	INT_PTR nResponse;
+	dlg.durationtext = CString("不可用");
+	// 显示对话框并等待用户点击OK
+	nResponse = dlg.DoModal();
+	if (nResponse == IDOK) {
+		// 从对话框获取读者ID和ISBN
+		int readerID = dlg.readerID;
+		std::string isbn = dlg.ISBN.GetBuffer();
+		// 清除列表
+		OnBnClickedButtonclear();
+		SetListBorrowMode();
+		std::vector<std::string> rets;
+		int row = 4;
+		// 构建SQL查询语句
+		std::string query = "SELECT * FROM Borrows WHERE 1=1";
+		if (readerID>0) {
+			query += " AND 读者证号 = " + std::to_string(readerID) + "";
+		}
+		if (!isbn.empty()) {
+			query += " AND 借书ISBN = '" + isbn + "'";
+		}
+		query += ";";
+
+		// 执行SQL查询
+		if (ExecuteSQL(query.c_str())) {
+			int i = 0;
+			while (FetchData(rets, row)) {
+				adminlist.InsertItem(i, _T(""));
+				adminlist.SetItemText(i, 0, Str2Cstr(rets[0]));
+				adminlist.SetItemText(i, 1, Str2Cstr(rets[1]));
+				adminlist.SetItemText(i, 2, Str2Cstr(rets[2]));
+				adminlist.SetItemText(i, 3, Str2Cstr(rets[3]));
+				i++;
+			}
+		}
+		else {
+			MessageBox("查询失败");
 		}
 	}
 }

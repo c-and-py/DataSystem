@@ -240,6 +240,15 @@ bool CreateUpdateTrigger()
 	return false;
 }
 
+bool CreateBorrowView()
+{
+	std::string sql = "create view borrowview as select 姓名,名称,借书日期,借书日期+借书时长 as 还书日期,电话 from Books,Readers,Borrows where Books.ISBN=Borrows.借书ISBN and Readers.读者证号=Borrows.读者证号;";
+	if (ExecuteSQL(sql)) {
+		return true;
+	}
+	return false;
+}
+
 bool CreateReaderTable()
 {
 	std::string sql = "create view ReaderView  as(select 读者证号, 姓名, Books.名称, 借书日期, 借书日期 + 借书时长 as 还书日期, 借书时长 from Readers, Books where Readers.借书ISBN = Books.ISBN); ";

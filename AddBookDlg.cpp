@@ -20,6 +20,10 @@ AddBookDlg::AddBookDlg(CWnd* pParent /*=nullptr*/)
 	, num(_T(""))
 	, press(_T(""))
 	, totalnum(_T(""))
+	, intimetext(_T("入库时间:"))
+	, remainnumtext(_T("余量:"))
+	, presstext(_T("出版社:"))
+	, totalnumtext(_T("总量:"))
 {
 
 }
@@ -38,6 +42,10 @@ void AddBookDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT5, num);
 	DDX_Text(pDX, IDC_EDIT6, press);
 	DDX_Text(pDX, IDC_EDIT7, totalnum);
+	DDX_Text(pDX, IDC_STATICINTIMETEXT, intimetext);
+	DDX_Text(pDX, IDC_STATICREMAINTEXT, remainnumtext);
+	DDX_Text(pDX, IDC_STATICPRESSTEXT, presstext);
+	DDX_Text(pDX, IDC_STATICNUMTEXT, totalnumtext);
 }
 
 

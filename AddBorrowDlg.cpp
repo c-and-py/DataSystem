@@ -17,6 +17,7 @@ AddBorrowDlg::AddBorrowDlg(CWnd* pParent /*=nullptr*/)
 	, ISBN(_T(""))
 	, borrowtime(_T(""))
 	, duration(0)
+	, durationtext(_T("借书时长"))
 {
 
 }
@@ -32,6 +33,7 @@ void AddBorrowDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT4, ISBN);
 	DDX_Text(pDX, IDC_EDIT5, borrowtime);
 	DDX_Text(pDX, IDC_EDIT6, duration);
+	DDX_Text(pDX, IDC_STATICDRRATION, durationtext);
 }
 
 

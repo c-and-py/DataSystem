@@ -29,4 +29,8 @@ public:
 	CString num;
 	CString press;
 	CString totalnum;
+	CString intimetext;
+	CString remainnumtext;
+	CString presstext;
+	CString totalnumtext;
 };

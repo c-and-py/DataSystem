@@ -28,6 +28,7 @@ public:
 	void SetListBookMode();
 	void SetListReaderMode();
 	void SetListBorrowMode();
+	void SetListBorrowViewMode();
 	afx_msg void OnBnClickedButtonallreader();
 	afx_msg void OnBnClickedButtonaddbook();
 	afx_msg void OnBnClickedButtonaddreader();
@@ -39,7 +40,12 @@ public:
 	const int BOOK = 1;
 	const int READER = 2;
 	const int BORROW = 3;
+	const int BORROWVIEW = 4;
 	int mode = 0;
 	afx_msg void OnBnClickedButtonallborrow();
 	afx_msg void OnBnClickedButtonborrow();
+	afx_msg void OnBnClickedButtonborrowview();
+	afx_msg void OnBnClickedButtonfindreader2();
+	afx_msg void OnBnClickedButtonfindbook();
+	afx_msg void OnBnClickedButtonfindborrow();
 };

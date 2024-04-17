@@ -22,9 +22,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnEnChangeEdit1();
 	int readerID;
 	CString ISBN;
 	CString borrowtime;
 	int duration;
+	CString durationtext;
 };

@@ -29,11 +29,21 @@
 #define IDC_EDIT7                       1006
 #define IDC_BUTTONADDBOOK               1006
 #define IDC_STATICVIEW                  1007
+#define IDC_BUTTONFINDREADER2           1007
 #define IDC_BUTTONADDREADER             1008
 #define IDC_STATICMAIN                  1009
 #define IDC_BUTTONCLEAR                 1009
 #define IDC_LIST2                       1010
+#define IDC_BUTTONBORROWVIEW            1011
+#define IDC_STATICNOUSE                 1011
 #define IDC_BUTTONALLBORROW             1012
+#define IDC_STATICDRRATION              1012
+#define IDC_BUTTONFINDBOOK              1013
+#define IDC_STATICINTIMETEXT            1013
+#define IDC_BUTTONFINDBORROW            1014
+#define IDC_STATICREMAINTEXT            1014
+#define IDC_STATICNUMTEXT               1015
+#define IDC_STATICPRESSTEXT             1016
 #define IDC_BUTTON9                     1018
 #define ID_32771                        32771
 #define ID_32772                        32772
@@ -45,7 +55,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        145
 #define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1011
+#define _APS_NEXT_CONTROL_VALUE         1017
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

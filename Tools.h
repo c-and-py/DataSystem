@@ -55,6 +55,8 @@ bool CreateReturnTrigger();
 bool CreateUpdateTrigger();
 //创建管理员视图
 bool CreateAdminView();
+//创建借书视图
+bool CreateBorrowView();
 //创建读者视图
 bool CreateReaderTable();
 
